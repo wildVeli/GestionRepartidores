@@ -25,6 +25,7 @@ public class GestionRepartidores extends Application {
         
         stage.setScene(scene);
         stage.show();
+        stage.alwaysOnTopProperty();
     }
 
     /**
