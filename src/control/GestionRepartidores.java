@@ -19,13 +19,13 @@ public class GestionRepartidores extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("UI.view.login.fxml"));
         
-        Scene scene = new Scene(root);
+        FXMLLoader loader=new FXMLLoader(getClass().getResource("/UI/view/login.fxml"));
+        Parent root=(Parent)loader.load();
         
-        stage.setScene(scene);
-        stage.show();
-        stage.close();
+        LoginController login =new LoginController();
+        login.setStage(stage);
+        login.initStage(root);
         
     }
 

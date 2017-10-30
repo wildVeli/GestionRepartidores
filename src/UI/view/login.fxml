@@ -4,22 +4,31 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="194.0" prefWidth="194.0" spacing="5.0" stylesheets="@Custom.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.controller.LoginController">
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="198.0" prefWidth="199.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.controller.LoginController">
    <children>
-      <Label text="Usuario" />
-      <TextField fx:id="usuario" prefHeight="26.0" prefWidth="197.0" />
-      <Label text="Contraseña" />
-      <TextField fx:id="password" />
-      <StackPane alignment="CENTER_RIGHT" prefHeight="43.0" prefWidth="177.0">
+      <VBox alignment="TOP_CENTER" prefHeight="143.0" prefWidth="159.0" spacing="20.0">
          <children>
-            <Button fx:id="botonAceptar" mnemonicParsing="false" text="Aceptar" />
+            <Label text="Login">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <TextField promptText="Usuario" fx:id="user" />
+            <TextField promptText="Contraseña" fx:id="password" />
          </children>
-      </StackPane>
+      </VBox>
+      <HBox alignment="TOP_CENTER" prefHeight="28.0" prefWidth="265.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#handleLoginButtonAction" text="Login" />
+         </children>
+      </HBox>
    </children>
    <padding>
-      <Insets left="30.0" right="30.0" top="25.0" />
+      <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
    </padding>
 </VBox>
