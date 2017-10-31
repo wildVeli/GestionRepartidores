@@ -5,6 +5,7 @@
  */
 package UI.controller;
 
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,6 +18,7 @@ import javafx.stage.Stage;
  */
 public class GestionRepartidores extends Application {
     
+    private static final Logger logger= Logger.getLogger("UI");
     @Override
     public void start(Stage stage) throws Exception {
         

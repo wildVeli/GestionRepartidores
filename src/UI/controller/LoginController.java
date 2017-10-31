@@ -5,6 +5,7 @@
  */
 package UI.controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -24,7 +25,7 @@ import javafx.stage.Stage;
  *
  * @author Sergio
  */
-public class LoginController {
+public class LoginController{
     
 
     private Stage stage;
@@ -49,9 +50,18 @@ public class LoginController {
         
     }
     @FXML      
-    private void handleLoginButtonAction(ActionEvent event) {
+    private void handleLoginButtonAction(ActionEvent event) throws IOException {
         if(!user.getText().trim().equals("") && !password.getText().trim().equals("")){
            //Comprobar en base de datos;
+           if(user.getText().equals("admin")){
+            FXMLLoader loader=new FXMLLoader(getClass().getResource("/UI/view/GestionPedidos.fxml"));
+            Parent root=(Parent)loader.load();
+            
+            GestionPedidosController gestionPedidos=new GestionPedidosController();
+            gestionPedidos.initStage(root);
+           }else{
+               
+           }
 
 
         
@@ -62,5 +72,4 @@ public class LoginController {
            alert.showAndWait();
        }
     }
-    
 }

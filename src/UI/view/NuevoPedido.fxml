@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="384.0" prefWidth="512.0" spacing="20.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.controller.NuevoPedidoController">
+   <children>
+      <HBox alignment="CENTER" prefHeight="367.0" prefWidth="472.0">
+         <children>
+            <VBox prefHeight="274.0" prefWidth="308.0" spacing="20.0">
+               <children>
+                  <VBox prefHeight="43.0" prefWidth="208.0">
+                     <children>
+                        <Label text="Número de Seguimiento" />
+                        <TextField disable="true" fx:id="numeroSeguimiento"/>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="49.0" prefWidth="208.0">
+                     <children>
+                        <Label text="Fecha de Entrada" />
+                        <TextField disable="true" fx:id="fechaEntrada" />
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="43.0" prefWidth="208.0">
+                     <children>
+                        <Label text="Tipo de pago" />
+                        <TextField fx:id="tipoPago"/>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label text="Repartidor" />
+                        <TextField fx:id="repartidor" />
+                     </children>
+                  </VBox>
+               </children>
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding>
+            </VBox>
+            <VBox prefHeight="275.0" prefWidth="317.0" spacing="20.0">
+               <children>
+                  <VBox prefHeight="42.0" prefWidth="213.0">
+                     <children>
+                        <Label text="Albarán" />
+                        <TextField disable="true" fx:id="albaran" />
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="22.0" prefWidth="213.0">
+                     <children>
+                        <Label text="Fecha de Salida" />
+                        <DatePicker prefHeight="25.0" prefWidth="224.0" fx:id="fechaSalida"/>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="41.0" prefWidth="153.0">
+                     <children>
+                        <Label text="Destino" />
+                        <TextField fx:id="destino"/>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label text="Área" />
+                        <TextField fx:id="area" />
+                     </children>
+                  </VBox>
+               </children>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding>
+            </VBox>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="49.0" prefWidth="472.0" spacing="30.0">
+         <children>
+            <Button mnemonicParsing="false" text="Guardar" fx:id="guardar" />
+            <Button mnemonicParsing="false" text="Atrás" fx:id="atras"/>
+         </children>
+      </HBox>
+   </children>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+</VBox>
