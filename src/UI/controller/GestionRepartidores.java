@@ -5,6 +5,8 @@
  */
 package UI.controller;
 
+import control.PedidoTestDataGenerator;
+import control.PedidosManager;
 import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -14,18 +16,22 @@ import javafx.stage.Stage;
 
 /**
  *
- * @author ubuntu
+ * @author Sergio
  */
 public class GestionRepartidores extends Application {
     
-    private static final Logger logger= Logger.getLogger("UI");
+    
     @Override
     public void start(Stage stage) throws Exception {
         
         FXMLLoader loader=new FXMLLoader(getClass().getResource("/UI/view/login.fxml"));
         Parent root=(Parent)loader.load();
         
-        LoginController login =new LoginController();
+        PedidosManager bussinesslogicController=new PedidoTestDataGenerator();
+        
+        
+        LoginController login =loader.getController();
+        login.setPedidosManager(bussinesslogicController);
         login.setStage(stage);
         login.initStage(root);
         

@@ -119,17 +119,14 @@
       </VBox>
    </top>
    <center>
-      <TableView minHeight="-Infinity" minWidth="-Infinity" prefHeight="493.0" prefWidth="994.0" BorderPane.alignment="CENTER">
+      <TableView fx:id="tablaPedidos" minHeight="-Infinity" minWidth="-Infinity" prefHeight="493.0" prefWidth="994.0" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn prefWidth="130.0" text="Número de seguimiento" />
-          <TableColumn prefWidth="130.0" text="Albarán" />
-            <TableColumn prefWidth="187.0" text="Fecha de Entrada" />
-            <TableColumn prefWidth="180.0" text="Direccion de Destino" />
-            <TableColumn prefWidth="172.0" text="Repartidor" />
+          <TableColumn fx:id="tbcolnSeguimiento" prefWidth="130.0"  text="Número de seguimiento" />
+          <TableColumn fx:id="tbcolAlbaran" prefWidth="130.0" text="Albarán" />
+            <TableColumn fx:id="tbcolnFechaEntrada" prefWidth="187.0" text="Fecha de Entrada" />
+            <TableColumn fx:id="tbcolDireccion" prefWidth="180.0" text="Direccion de Destino" />
+            <TableColumn fx:id="tbcolnRepartidor" prefWidth="172.0" text="Repartidor" />
         </columns>
-         <columnResizePolicy>
-            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-         </columnResizePolicy>
       </TableView>
    </center>
    <padding>

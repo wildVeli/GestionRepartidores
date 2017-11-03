@@ -5,9 +5,11 @@
  */
 package UI.controller;
 
+import control.PedidosManager;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,7 +29,7 @@ import javafx.stage.Stage;
  */
 public class LoginController{
     
-
+    private static final Logger logger= Logger.getLogger("UI");
     private Stage stage;
     @FXML
     private TextField user;
@@ -35,6 +37,7 @@ public class LoginController{
     private TextField password;
     @FXML
     private Button login;
+    private PedidosManager pedidosManager;
 
     public void setStage(Stage stage){
         this.stage=stage;
@@ -57,7 +60,8 @@ public class LoginController{
             FXMLLoader loader=new FXMLLoader(getClass().getResource("/UI/view/GestionPedidos.fxml"));
             Parent root=(Parent)loader.load();
             
-            GestionPedidosController gestionPedidos=new GestionPedidosController();
+            GestionPedidosController gestionPedidos=loader.getController();
+            gestionPedidos.setPedidosManager(pedidosManager);
             gestionPedidos.initStage(root);
            }else{
                
@@ -71,5 +75,9 @@ public class LoginController{
           // dialogPane.getStylesheets().add(getClass().getResource("Custom.css").toExternalForm());
            alert.showAndWait();
        }
+    }
+
+    void setPedidosManager(PedidosManager bussinesslogicController) {
+        this.pedidosManager=bussinesslogicController;
     }
 }
