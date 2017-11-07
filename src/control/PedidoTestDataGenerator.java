@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author ubuntu
+ * @author Sergio López
  */
 public class PedidoTestDataGenerator implements PedidosManager{
     private static final Logger logger=Logger.getLogger("control");

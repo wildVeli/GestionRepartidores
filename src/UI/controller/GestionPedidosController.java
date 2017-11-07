@@ -7,6 +7,7 @@ package UI.controller;
 
 import control.PedidoBean;
 import control.PedidosManager;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -16,6 +17,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -82,6 +84,8 @@ public class GestionPedidosController  {
     }
     private void handleWindowShowing(WindowEvent event){
         logger.info("Beginning LoginController::handleWindowShowing");
+        detalles.setDisable(true);
+        eliminar.setDisable(true);
         tbcolnSeguimiento.setCellValueFactory(new PropertyValueFactory<>("nSeguimiento"));
         tbcolAlbaran.setCellValueFactory(new PropertyValueFactory<>("albaran"));
         tbcolnFechaEntrada.setCellValueFactory(new PropertyValueFactory<>("fechaEntrada"));
@@ -96,7 +100,7 @@ public class GestionPedidosController  {
         }     
         tablaPedidos.setItems(pedidosData);
         //Añade un listener para reaccinar a la selección de filas de una tabla
-        tablaPedidos.getSelectionModel().selectedIndexProperty().addListener(this::handlePeidosTableSelectionChanged);
+        tablaPedidos.getSelectionModel().selectedItemProperty().addListener(this::handlePeidosTableSelectionChanged);
     }
     private void handlePeidosTableSelectionChanged(ObservableValue observable,Object oldValue,Object newValue){
         //Si se ha seleccionado una fila de la tabla,
@@ -106,6 +110,18 @@ public class GestionPedidosController  {
             detalles.setDisable(false);
             eliminar.setDisable(false);
         }
+    }
+    @FXML
+    private void handleBotonNuevoPedidoAction(ActionEvent event) throws IOException{
+        FXMLLoader loader=new FXMLLoader(getClass().getResource("/UI/view/NuevoPedido.fxml"));
+        Parent root=(Parent)loader.load();
+            
+        NuevoPedidoController nuevoPedido=loader.getController();
+        nuevoPedido.initStage(root);
+    }
+    @FXML
+    private void handleBotonSalirAction(ActionEvent event){
+        stage.close();
     }
     @FXML
     private void handleBotonDetallesAction(ActionEvent event){
