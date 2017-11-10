@@ -81,8 +81,8 @@
       </HBox>
       <HBox alignment="CENTER" prefHeight="49.0" prefWidth="472.0" spacing="30.0">
          <children>
-            <Button mnemonicParsing="false" text="Guardar" fx:id="guardar" />
-            <Button mnemonicParsing="false" text="Atrás" fx:id="atras"/>
+            <Button mnemonicParsing="false" text="Guardar" fx:id="guardar" onAction="#handleBotonGuardarAction"/>
+            <Button mnemonicParsing="false" text="Atrás" fx:id="atras" onAction="#handleBotonAtrasAction"/>
          </children>
       </HBox>
    </children>

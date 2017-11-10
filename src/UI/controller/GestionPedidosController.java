@@ -25,6 +25,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -63,6 +64,8 @@ public class GestionPedidosController  {
     private Button salir;
     @FXML
     private Button nuevoPedido;
+    @FXML
+    private ComboBox comboBoxBusquedaPedidos;
     private PedidosManager pedidosManager;
     
     
@@ -82,7 +85,27 @@ public class GestionPedidosController  {
         stage.setOnShowing(this::handleWindowShowing);
         stage.show();
     }
+    /*
+        La ComboBox de búsqueda de pedidos se carga con los valores:
+    Número de seguimiento
+    Albarán
+    Fecha de entrada
+    Dirección de destino
+    El campo de texto de búsqueda se deshabilita
+    El botón de buscar se deshabilita
+    El botón de nuevo pedido se habilita
+    La tabla de datos se carga con todos los pedidos
+    El botón de detalles se deshabilita
+    El botón eliminar se deshabilita
+    El botón de salir se habilita
+
+    La ComboBox se búsqueda avanzada se carga con todas las áreas almacenadas en la base de datos.
+    Los campos de fecha de entrada y de salida se habilitan
+    El botón de buscar de la búsqueda avanzada se habilita
+    */
     private void handleWindowShowing(WindowEvent event){
+        
+        
         logger.info("Beginning LoginController::handleWindowShowing");
         detalles.setDisable(true);
         eliminar.setDisable(true);
@@ -102,6 +125,11 @@ public class GestionPedidosController  {
         //Añade un listener para reaccinar a la selección de filas de una tabla
         tablaPedidos.getSelectionModel().selectedItemProperty().addListener(this::handlePeidosTableSelectionChanged);
     }
+    /*
+        Tabla
+    Selección
+    Habilita los botones Detalles y Eliminaral seleccionar una fila de la tabla
+    */
     private void handlePeidosTableSelectionChanged(ObservableValue observable,Object oldValue,Object newValue){
         //Si se ha seleccionado una fila de la tabla,
         //Habilitar los botones de detalles y eliminar
@@ -111,14 +139,25 @@ public class GestionPedidosController  {
             eliminar.setDisable(false);
         }
     }
+    /*
+        Botón de nuevo pedido...
+    Pulsación
+    Abre la ventana Nuevo pedido con un String "NuevoPedido" , refrescar la tabla al volver a la ventana anterior
+    */
     @FXML
     private void handleBotonNuevoPedidoAction(ActionEvent event) throws IOException{
-        FXMLLoader loader=new FXMLLoader(getClass().getResource("/UI/view/NuevoPedido.fxml"));
+        FXMLLoader loader= new FXMLLoader(getClass().getResource("/UI/view/NuevoPedido.fxml"));
         Parent root=(Parent)loader.load();
             
-        NuevoPedidoController nuevoPedido=loader.getController();
-        nuevoPedido.initStage(root);
+        NuevoPedidoController nuevoPedid=loader.getController();
+        nuevoPedid.setTipoVentana("NuevoPedido");
+        nuevoPedid.initStage(root);
     }
+    /*
+        Botón Salir
+    Pulsación
+    Muestra un diálogo de confirmación y cierra la ventana en caso afirmativo.
+    */
     @FXML
     private void handleBotonSalirAction(ActionEvent event){
         stage.close();
@@ -127,6 +166,12 @@ public class GestionPedidosController  {
     private void handleBotonDetallesAction(ActionEvent event){
         
     }
+    /*
+        Botón Eliminar
+    Pulsación
+    Muestra un cuadro de diálogo de confirmación de borrado del pedido seleccionado en la tabla
+    Y si confirma borrado eliminar el pedido seleccionado de la colección de pedidos y refrescar la tabla.
+    */
     @FXML
     private void handleBotonEliminarAction(ActionEvent event){
         Alert alert = new Alert(AlertType.CONFIRMATION,"¿Está seguro de que desea eliminar el pedido? ");
@@ -142,3 +187,31 @@ public class GestionPedidosController  {
     }
     
 }
+
+
+/*
+ComBox de búsqueda de pedido
+Selección
+Se habilita el campo de texto de búsqueda de pedidos
+
+Campo de texto de búsqueda de pedidos
+Cambio de texto
+El botón buscar se habilita
+
+Botón buscar
+Pulsación
+Rellena la tabla aplicando los criterios de búsqueda seleccionados en la pestaña
+
+Combobox de búsqueda avanzada
+Selección
+Habilita el botón buscar de la ventana correspondiente en el caso de no estarlo
+
+Campo de fecha izquierdo
+Selección de fecha
+Habilita el botón buscar de la ventana correspondiente en el caso de no estarlo
+
+Campo de fecha derecho
+Selección de fecha
+Habilita el botón buscar de la ventana correspondiente en el caso de no estarlo
+
+*/

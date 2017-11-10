@@ -9,19 +9,23 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
+import javafx.beans.Observable;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 /**
  *
- * @author ubuntu
+ * @author Sergio
  */
 public class NuevoPedidoController {
     
+    private String tipoVentana;
     private Stage stage;
     @FXML
     private TextField numeroSeguimiento;
@@ -34,7 +38,7 @@ public class NuevoPedidoController {
     @FXML
     private TextField albaran;
     @FXML
-    private TextField fechaSalida;
+    private DatePicker fechaSalida;
     @FXML
     private TextField destino;
     @FXML
@@ -43,6 +47,10 @@ public class NuevoPedidoController {
     private Button guardar;
     @FXML
     private Button atras;
+
+    public void setTipoVentana(String tipoVentana) {
+        this.tipoVentana = tipoVentana;
+    }
     
     
     public void setStage(Stage stage) {
@@ -57,11 +65,12 @@ public class NuevoPedidoController {
     El botón guardar se deshabilita
     El botón atrás se habilita
     */
-    public void initStage(Parent root,String tipo){
+    public void initStage(Parent root){
+        stage=new Stage();
         Scene scene = new Scene(root);
         stage.setScene(scene);
        
-        if(tipo.equals("NuevoPedido")){
+        if(tipoVentana.equals("NuevoPedido")){
             Random rnd=new Random();
             numeroSeguimiento.setDisable(true);
             fechaEntrada.setDisable(true);
@@ -74,32 +83,45 @@ public class NuevoPedidoController {
             guardar.setDisable(true);           
             stage.setTitle("Nuevo pedido");
             
+            fechaSalida.getEditor().textProperty().addListener(this::handleTextChangeRequired);
+            area.textProperty().addListener(this::handleTextChangeRequired);
+            destino.textProperty().addListener(this::handleTextChangeRequired);
+            repartidor.textProperty().addListener(this::handleTextChangeRequired);
+            tipoPago.textProperty().addListener(this::handleTextChangeRequired);
             
         }else{
-            stage.setTitle("Detalles ");
+            stage.setTitle("Detalles");
         }
         stage.show();
         
+        
+        
     }
-    
-    
-
-    
     /*Botón guardar  pulsación
         Se comprueba que los campos fecha de salida, tipo de pago, destino, repartidor y área estén informados.
     En el caso de estarlo, se presenta un diálogo de confirmación para confirmar el nuevo pedido
     En el caso de no estarlo se presentará un cuadro de diálogo al usuario notificándole qué campos de texto 
         están incorrectamente informados y se cambia el borde de los campos de texto correspondientes a rojo.
     */
+    @FXML
+    private void handleBotonGuardarAction (ActionEvent event){
+       
+           
+    }
     /*Botón atras pulsación
     Se muestra un diálogo de confirmación para cerrar la ventana.
     */
-
-    void initStage(Parent root) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    @FXML
+    private void handleBotonAtrasAction (ActionEvent event){
+            stage.close();
     }
-
-    
-    
+    private void handleTextChangeRequired (Observable value,String oldValue,String newValue){
+        if(!repartidor.getText().isEmpty()&& tipoPago.getText().isEmpty()&&
+                   destino.getText().isEmpty()&&area.getText().isEmpty()&&
+                   fechaSalida.getEditor().getText().isEmpty()){
+               guardar.setDisable(false);
+               stage.close();
+           }
+    }
   
 }

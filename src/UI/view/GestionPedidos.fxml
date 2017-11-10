@@ -57,7 +57,7 @@
                            <children>
                               <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="62.0" prefWidth="510.0" spacing="20.0" style="-fx-border-width: 1; -fx-border-color: black;">
                                  <children>
-                                    <ComboBox prefWidth="150.0" />
+                                    <ComboBox prefWidth="150.0" fx:id="comboBoxBusquedaPedidos" />
                                     <TextField promptText="Parámetro de búsqueda" />
                                     <Button mnemonicParsing="false" text="Buscar" />
                                  </children>
