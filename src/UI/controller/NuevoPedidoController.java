@@ -5,6 +5,8 @@
  */
 package UI.controller;
 
+import control.PedidoBean;
+import control.PedidosManager;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,6 +18,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -47,7 +50,25 @@ public class NuevoPedidoController {
     private Button guardar;
     @FXML
     private Button atras;
+    private TableView<PedidoBean> tablaPedidos;
+    private PedidoBean pedidoDetalles;
+    private PedidosManager pedidosManager;
+    
+    
+    void setPedidosManager(PedidosManager pedidosManager) {
+        this.pedidosManager=pedidosManager;
+    }
 
+    public void setPedidoDetalles(PedidoBean pedidoDetalles) {
+        this.pedidoDetalles = pedidoDetalles;
+    }
+
+
+    
+    public void setTablaPedidos(TableView<PedidoBean> tablaPedidos) {
+        this.tablaPedidos = tablaPedidos;
+    }
+        
     public void setTipoVentana(String tipoVentana) {
         this.tipoVentana = tipoVentana;
     }
@@ -56,7 +77,7 @@ public class NuevoPedidoController {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
-    /*Inicialización NUEVO SEGUIMIENTO 
+    /*Inicialización NUEVO PEDIDO 
     El campo de texto de seguimiento, albarán y fecha de entrada se deshabilitan.
     El campo de texto fecha de salida, tipo de pago, destino y área se habilitan
     El sistema asigna un número de seguimiento válido y rellena el campo de texto número de seguimiento
@@ -69,28 +90,41 @@ public class NuevoPedidoController {
         stage=new Stage();
         Scene scene = new Scene(root);
         stage.setScene(scene);
-       
+        
+
+        fechaEntrada.setDisable(true);
+        numeroSeguimiento.setDisable(true);
+        albaran.setDisable(true);
+            
+        fechaSalida.getEditor().textProperty().addListener(this::handleTextChangeRequired);
+        area.textProperty().addListener(this::handleTextChangeRequired);
+        destino.textProperty().addListener(this::handleTextChangeRequired);
+        repartidor.textProperty().addListener(this::handleTextChangeRequired);
+        tipoPago.textProperty().addListener(this::handleTextChangeRequired);
+        
         if(tipoVentana.equals("NuevoPedido")){
             Random rnd=new Random();
-            numeroSeguimiento.setDisable(true);
-            fechaEntrada.setDisable(true);
             DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             Date date = new Date();
-            fechaEntrada.setText(dateFormat.format(date));
+            guardar.setDisable(true);
             numeroSeguimiento.setText(String.valueOf(rnd.nextInt()));
-            albaran.setDisable(true);
-            albaran.setText(String.valueOf(rnd.nextInt()));         
-            guardar.setDisable(true);           
+            albaran.setText(String.valueOf(rnd.nextInt())); 
+            fechaEntrada.setText(dateFormat.format(date));
             stage.setTitle("Nuevo pedido");
+           
+
+           
+        }else if (tipoVentana.equals("Detalles")){
+            stage.setTitle("Detalles pedido");
+            numeroSeguimiento.setText(String.valueOf(pedidoDetalles.getNSeguimiento()));
+            fechaEntrada.setText(pedidoDetalles.getFechaEntrada());
+            albaran.setText(String.valueOf(pedidoDetalles.getAlbaran()));
+            fechaSalida.getEditor().setText(pedidoDetalles.getFechaSalida());
+            tipoPago.setText(pedidoDetalles.gettPago());
+            destino.setText(pedidoDetalles.getDestino());
+            repartidor.setText(String.valueOf(pedidoDetalles.getRepartidor()));
+            area.setText(String.valueOf(pedidoDetalles.getArea()));
             
-            fechaSalida.getEditor().textProperty().addListener(this::handleTextChangeRequired);
-            area.textProperty().addListener(this::handleTextChangeRequired);
-            destino.textProperty().addListener(this::handleTextChangeRequired);
-            repartidor.textProperty().addListener(this::handleTextChangeRequired);
-            tipoPago.textProperty().addListener(this::handleTextChangeRequired);
-            
-        }else{
-            stage.setTitle("Detalles");
         }
         stage.show();
         
@@ -105,23 +139,37 @@ public class NuevoPedidoController {
     */
     @FXML
     private void handleBotonGuardarAction (ActionEvent event){
+        if(tipoVentana.equals("NuevoPedido")){
+            PedidoBean nuevoPedidoBean = new PedidoBean(Integer.valueOf(numeroSeguimiento.getText()),
+            Integer.valueOf(albaran.getText()),fechaEntrada.getText(),fechaSalida.getEditor().getText(),
+            destino.getText(),tipoPago.getText(),Integer.valueOf(repartidor.getText()),Integer.valueOf(area.getText()));
+            tablaPedidos.getItems().add(nuevoPedidoBean);
+            pedidosManager.addPedido(nuevoPedidoBean);
+            tablaPedidos.refresh();
        
+        }else if (tipoVentana.equals("Detalles")){
+            
+        }
+            stage.close();
            
     }
     /*Botón atras pulsación
-    Se muestra un diálogo de confirmación para cerrar la ventana.
+    Se cierra la ventana.
     */
     @FXML
     private void handleBotonAtrasAction (ActionEvent event){
             stage.close();
     }
     private void handleTextChangeRequired (Observable value,String oldValue,String newValue){
-        if(!repartidor.getText().isEmpty()&& tipoPago.getText().isEmpty()&&
-                   destino.getText().isEmpty()&&area.getText().isEmpty()&&
-                   fechaSalida.getEditor().getText().isEmpty()){
-               guardar.setDisable(false);
-               stage.close();
-           }
+        if(!(repartidor.getText().isEmpty() || tipoPago.getText().isEmpty()||
+            destino.getText().isEmpty()||area.getText().isEmpty()||
+            fechaSalida.getEditor().getText().isEmpty())){
+            guardar.setDisable(false);
+        }else {
+            guardar.setDisable(true);
+        }
+        
+
     }
   
 }

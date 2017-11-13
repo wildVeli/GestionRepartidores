@@ -14,14 +14,21 @@ import java.util.logging.Logger;
  * @author Sergio López
  */
 public class PedidoTestDataGenerator implements PedidosManager{
+    
     private static final Logger logger=Logger.getLogger("control");
     private ArrayList<PedidoBean>  pedidos;
 
+    
     public PedidoTestDataGenerator() {
         pedidos=new ArrayList();
         for (int i = 0; i < 25; i++) {
             pedidos.add(new PedidoBean(i,i,i+"/1/2017",i+"/2/2017","Bilbao"+i,"A",i,i));
         }
+    }
+    
+    @Override
+    public void addPedido(PedidoBean pedidoBean){
+        pedidos.add(pedidoBean);
     }
     @Override
     public Collection getAllPedidos() {

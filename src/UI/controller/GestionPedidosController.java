@@ -42,7 +42,6 @@ public class GestionPedidosController  {
 
     private static final Logger logger= Logger.getLogger("UI");
 
-
     private Stage stage;
     @FXML
     private TableColumn tbcolnSeguimiento;
@@ -151,7 +150,10 @@ public class GestionPedidosController  {
             
         NuevoPedidoController nuevoPedid=loader.getController();
         nuevoPedid.setTipoVentana("NuevoPedido");
-        nuevoPedid.initStage(root);
+        nuevoPedid.setTablaPedidos(tablaPedidos);
+        nuevoPedid.setPedidosManager(pedidosManager);
+        nuevoPedid.initStage(root);    
+
     }
     /*
         Botón Salir
@@ -162,9 +164,24 @@ public class GestionPedidosController  {
     private void handleBotonSalirAction(ActionEvent event){
         stage.close();
     }
+    /*
+    Pulsación
+    Abre la ventana Nuevo pedido con un String "Detalles" , cargando los detalles de la fila seleccionada.
+    Refresca la tabla al volver si se han modificado los datos
+    Si hay una fila seleccionada.
+    
+    */
     @FXML
-    private void handleBotonDetallesAction(ActionEvent event){
-        
+    private void handleBotonDetallesAction(ActionEvent event) throws IOException{
+        FXMLLoader loader= new FXMLLoader(getClass().getResource("/UI/view/NuevoPedido.fxml"));
+        Parent root=(Parent)loader.load();
+            
+        NuevoPedidoController nuevoPedid=loader.getController();
+        nuevoPedid.setTipoVentana("Detalles");
+        nuevoPedid.setTablaPedidos(tablaPedidos);
+        nuevoPedid.setPedidosManager(pedidosManager);
+        nuevoPedid.setPedidoDetalles((PedidoBean)tablaPedidos.getSelectionModel().getSelectedItem());
+        nuevoPedid.initStage(root); 
     }
     /*
         Botón Eliminar
