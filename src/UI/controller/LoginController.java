@@ -5,6 +5,7 @@
  */
 package UI.controller;
 
+import control.AreaManager;
 import control.PedidosManager;
 import java.io.IOException;
 import java.net.URL;
@@ -38,9 +39,17 @@ public class LoginController{
     @FXML
     private Button login;
     private PedidosManager pedidosManager;
+    private AreaManager areaManager;
 
     public void setStage(Stage stage){
         this.stage=stage;
+    }
+    void setPedidosManager(PedidosManager bussinesslogicController) {
+        this.pedidosManager=bussinesslogicController;
+    }
+
+    void setAreaManager(AreaManager areaManagerController) {
+        this.areaManager=areaManagerController;
     }
     @FXML
     
@@ -62,10 +71,11 @@ public class LoginController{
             
             GestionPedidosController gestionPedidos=loader.getController();
             gestionPedidos.setPedidosManager(pedidosManager);
+            gestionPedidos.setAreaManager(areaManager);
             gestionPedidos.initStage(root);
-           }else{
+        }else{
                
-           }
+        }
 
 
         
@@ -77,7 +87,5 @@ public class LoginController{
        }
     }
 
-    void setPedidosManager(PedidosManager bussinesslogicController) {
-        this.pedidosManager=bussinesslogicController;
-    }
+
 }

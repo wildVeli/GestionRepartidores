@@ -132,13 +132,12 @@ public class NuevoPedidoController {
         
     }
     /*Botón guardar  pulsación
-        Se comprueba que los campos fecha de salida, tipo de pago, destino, repartidor y área estén informados.
-    En el caso de estarlo, se presenta un diálogo de confirmación para confirmar el nuevo pedido
-    En el caso de no estarlo se presentará un cuadro de diálogo al usuario notificándole qué campos de texto 
-        están incorrectamente informados y se cambia el borde de los campos de texto correspondientes a rojo.
+        Se comprueba que los campos tengan el tipo de dato correcto y se 
+        guarda en la base de datos
     */
     @FXML
     private void handleBotonGuardarAction (ActionEvent event){
+        //Guarda un nuevo pedido
         if(tipoVentana.equals("NuevoPedido")){
             PedidoBean nuevoPedidoBean = new PedidoBean(Integer.valueOf(numeroSeguimiento.getText()),
             Integer.valueOf(albaran.getText()),fechaEntrada.getText(),fechaSalida.getEditor().getText(),
@@ -146,7 +145,7 @@ public class NuevoPedidoController {
             tablaPedidos.getItems().add(nuevoPedidoBean);
             pedidosManager.addPedido(nuevoPedidoBean);
             tablaPedidos.refresh();
-       
+       //Modifica un pedido existente de los datos
         }else if (tipoVentana.equals("Detalles")){
             
         }

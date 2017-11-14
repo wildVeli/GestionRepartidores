@@ -58,8 +58,8 @@
                               <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="62.0" prefWidth="510.0" spacing="20.0" style="-fx-border-width: 1; -fx-border-color: black;">
                                  <children>
                                     <ComboBox prefWidth="150.0" fx:id="comboBoxBusquedaPedidos" />
-                                    <TextField promptText="Parámetro de búsqueda" />
-                                    <Button mnemonicParsing="false" text="Buscar" />
+                                    <TextField promptText="Parámetro de búsqueda" fx:id="tfBuscarSimple"/>
+                                    <Button mnemonicParsing="false" text="Buscar" fx:id="buscarSimple" />
                                  </children>
                                  <padding>
                                     <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
@@ -83,9 +83,9 @@
                            <children>
                               <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="62.0" prefWidth="689.0" spacing="20.0" style="-fx-border-width: 1; -fx-border-color: black;">
                                  <children>
-                                    <ComboBox prefWidth="150.0" />
-                                    <DatePicker />
-                                    <DatePicker />
+                                    <ComboBox prefWidth="150.0" fx:id="comboBoxAreas" />
+                                    <DatePicker fx:id="dpfechaEntrada" />
+                                    <DatePicker fx:id="dpfechaSalida"/>
                                     <Button mnemonicParsing="false" text="Buscar" />
                                  </children>
                                  <padding>

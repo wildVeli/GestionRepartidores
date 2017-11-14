@@ -5,6 +5,8 @@
  */
 package UI.controller;
 
+import control.AreaManager;
+import control.AreaTestDataGenerator;
 import control.PedidoTestDataGenerator;
 import control.PedidosManager;
 import java.util.logging.Logger;
@@ -16,7 +18,7 @@ import javafx.stage.Stage;
 
 /**
  *
- * @author Sergio
+ * @author Sergio López
  */
 public class GestionRepartidores extends Application {
     
@@ -28,10 +30,13 @@ public class GestionRepartidores extends Application {
         Parent root=(Parent)loader.load();
         
         PedidosManager bussinesslogicController=new PedidoTestDataGenerator();
+        AreaManager areaManagerController=new AreaTestDataGenerator();
+        areaManagerController.AreaTestDataGenerator();
         
         
         LoginController login =loader.getController();
         login.setPedidosManager(bussinesslogicController);
+        login.setAreaManager(areaManagerController);
         login.setStage(stage);
         login.initStage(root);
         

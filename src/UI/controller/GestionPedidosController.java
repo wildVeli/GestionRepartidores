@@ -7,6 +7,7 @@ package UI.controller;
 
 import control.PedidoBean;
 import control.PedidosManager;
+import control.AreaManager;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
@@ -26,9 +27,11 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -65,7 +68,22 @@ public class GestionPedidosController  {
     private Button nuevoPedido;
     @FXML
     private ComboBox comboBoxBusquedaPedidos;
+    @FXML
+    private ComboBox comboBoxAreas;
+    @FXML
+    private Button buscarSimple;
+    @FXML
+    private TextField tfBuscarSimple;
+    @FXML
+    private DatePicker dpfechaEntrada;
+    @FXML
+    private DatePicker dpfechaSalida;
+    private AreaManager areaManager;
     private PedidosManager pedidosManager;
+
+    public void setAreaManager(AreaManager areaManager) {
+        this.areaManager = areaManager;
+    }
     
     
     void setPedidosManager(PedidosManager pedidosManager) {
@@ -92,15 +110,11 @@ public class GestionPedidosController  {
     Dirección de destino
     El campo de texto de búsqueda se deshabilita
     El botón de buscar se deshabilita
-    El botón de nuevo pedido se habilita
     La tabla de datos se carga con todos los pedidos
     El botón de detalles se deshabilita
     El botón eliminar se deshabilita
-    El botón de salir se habilita
 
     La ComboBox se búsqueda avanzada se carga con todas las áreas almacenadas en la base de datos.
-    Los campos de fecha de entrada y de salida se habilitan
-    El botón de buscar de la búsqueda avanzada se habilita
     */
     private void handleWindowShowing(WindowEvent event){
         
@@ -108,6 +122,24 @@ public class GestionPedidosController  {
         logger.info("Beginning LoginController::handleWindowShowing");
         detalles.setDisable(true);
         eliminar.setDisable(true);
+        buscarSimple.setDisable(true);
+        tfBuscarSimple.setDisable(true);
+        dpfechaEntrada.setPromptText("Fecha entrada");
+        dpfechaSalida.setPromptText("Fecha salida");
+        
+        
+        comboBoxBusquedaPedidos.getItems().add("N.Seguimiento");
+        comboBoxBusquedaPedidos.getItems().add("Destino");
+        comboBoxBusquedaPedidos.getItems().add("Albarán");
+        comboBoxBusquedaPedidos.getItems().add("Fecha Entrada");
+        comboBoxBusquedaPedidos.setPromptText("Filtro");
+        
+        for (Object allAreaName : areaManager.getAllAreaNames()) {
+            comboBoxAreas.getItems().add(allAreaName.toString());
+        }
+        //comboBoxAreas.setItems(areasName);
+       // comboBoxAreas.getItems().add("Todos");
+        comboBoxAreas.setPromptText("Area");
         tbcolnSeguimiento.setCellValueFactory(new PropertyValueFactory<>("nSeguimiento"));
         tbcolAlbaran.setCellValueFactory(new PropertyValueFactory<>("albaran"));
         tbcolnFechaEntrada.setCellValueFactory(new PropertyValueFactory<>("fechaEntrada"));

@@ -11,9 +11,8 @@ import java.util.Collection;
  *
  * @author Sergio López
  */
-public interface PedidosManager {
+public interface AreaManager {
     
-    public Collection getAllPedidos();
-    public void pedidoExiste(Integer nSeguimiento);
-    public void addPedido(PedidoBean pedidoBean);
+    public void AreaTestDataGenerator();
+    public Collection getAllAreaNames();
 }
