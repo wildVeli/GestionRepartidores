@@ -137,19 +137,21 @@ public class NuevoPedidoController {
     */
     @FXML
     private void handleBotonGuardarAction (ActionEvent event){
-        //Guarda un nuevo pedido
-        if(tipoVentana.equals("NuevoPedido")){
-            PedidoBean nuevoPedidoBean = new PedidoBean(Integer.valueOf(numeroSeguimiento.getText()),
+        PedidoBean pedidoBean = new PedidoBean(Integer.valueOf(numeroSeguimiento.getText()),
             Integer.valueOf(albaran.getText()),fechaEntrada.getText(),fechaSalida.getEditor().getText(),
             destino.getText(),tipoPago.getText(),Integer.valueOf(repartidor.getText()),Integer.valueOf(area.getText()));
-            tablaPedidos.getItems().add(nuevoPedidoBean);
-            pedidosManager.addPedido(nuevoPedidoBean);
-            tablaPedidos.refresh();
+        //Guarda un nuevo pedido
+        if(tipoVentana.equals("NuevoPedido")){
+            pedidosManager.addPedido(pedidoBean);
+            
        //Modifica un pedido existente de los datos
         }else if (tipoVentana.equals("Detalles")){
-            
+            tablaPedidos.getItems().remove(pedidoDetalles);
+            pedidosManager.updatePedido(pedidoBean);
         }
-            stage.close();
+        tablaPedidos.getItems().add(pedidoBean);
+        tablaPedidos.refresh();
+        stage.close();
            
     }
     /*Botón atras pulsación

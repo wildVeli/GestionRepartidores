@@ -16,4 +16,5 @@ public interface PedidosManager {
     public Collection getAllPedidos();
     public void pedidoExiste(Integer nSeguimiento);
     public void addPedido(PedidoBean pedidoBean);
+    public void updatePedido(PedidoBean pedidoBean);
 }

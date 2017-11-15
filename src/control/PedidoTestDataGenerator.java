@@ -45,5 +45,14 @@ public class PedidoTestDataGenerator implements PedidosManager{
         }
         */
     }
+
+    @Override
+    public void updatePedido(PedidoBean pedidoBean) {
+        for (PedidoBean pedido : pedidos) {
+            if(pedido.getNSeguimiento().equals(pedidoBean.getNSeguimiento())){
+                pedido=pedidoBean;
+            }
+        }
+    }
     
 }

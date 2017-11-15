@@ -13,6 +13,7 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
+import javafx.beans.Observable;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -123,7 +124,7 @@ public class GestionPedidosController  {
         detalles.setDisable(true);
         eliminar.setDisable(true);
         buscarSimple.setDisable(true);
-        tfBuscarSimple.setDisable(true);
+        tfBuscarSimple.textProperty().addListener(this::handleTextFieldBuscarSimple);
         dpfechaEntrada.setPromptText("Fecha entrada");
         dpfechaSalida.setPromptText("Fecha salida");
         
@@ -132,14 +133,15 @@ public class GestionPedidosController  {
         comboBoxBusquedaPedidos.getItems().add("Destino");
         comboBoxBusquedaPedidos.getItems().add("Albarán");
         comboBoxBusquedaPedidos.getItems().add("Fecha Entrada");
-        comboBoxBusquedaPedidos.setPromptText("Filtro");
+
+        comboBoxBusquedaPedidos.getSelectionModel().selectFirst();
         
+        comboBoxAreas.getItems().add("Todas las áreas");
         for (Object allAreaName : areaManager.getAllAreaNames()) {
             comboBoxAreas.getItems().add(allAreaName.toString());
         }
-        //comboBoxAreas.setItems(areasName);
-       // comboBoxAreas.getItems().add("Todos");
-        comboBoxAreas.setPromptText("Area");
+        comboBoxAreas.getSelectionModel().selectFirst();
+        
         tbcolnSeguimiento.setCellValueFactory(new PropertyValueFactory<>("nSeguimiento"));
         tbcolAlbaran.setCellValueFactory(new PropertyValueFactory<>("albaran"));
         tbcolnFechaEntrada.setCellValueFactory(new PropertyValueFactory<>("fechaEntrada"));
@@ -155,6 +157,13 @@ public class GestionPedidosController  {
         tablaPedidos.setItems(pedidosData);
         //Añade un listener para reaccinar a la selección de filas de una tabla
         tablaPedidos.getSelectionModel().selectedItemProperty().addListener(this::handlePeidosTableSelectionChanged);
+    }
+    private void handleTextFieldBuscarSimple (Observable value,String oldValue,String newValue){
+        if(!tfBuscarSimple.getText().isEmpty()){
+            buscarSimple.setDisable(false);
+        }else{
+            buscarSimple.setDisable(true);
+        }
     }
     /*
         Tabla
