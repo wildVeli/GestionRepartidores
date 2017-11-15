@@ -94,7 +94,7 @@
                               </HBox>
                               <HBox alignment="CENTER_RIGHT" prefHeight="62.0" prefWidth="510.0">
                                  <children>
-                                    <Button mnemonicParsing="false" text="Nuevo Pedido..." fx:id="nuevoPedido"/>
+                                    <Button mnemonicParsing="false" text="Nuevo Pedido..." fx:id="nuevoPedidoAvanzado" onAction="#handleBotonNuevoPedidoAction"/>
                                  </children>
                                  <HBox.margin>
                                     <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
