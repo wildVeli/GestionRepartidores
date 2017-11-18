@@ -19,9 +19,9 @@
       <Insets />
    </opaqueInsets>
    <bottom>
-      <VBox prefHeight="83.0" prefWidth="974.0" BorderPane.alignment="CENTER">
+      <VBox prefHeight="83.0" prefWidth="974.0" BorderPane.alignment="CENTER" >
          <children>
-            <Pagination prefHeight="47.0" prefWidth="994.0" />
+          <!--  <Pagination prefHeight="47.0" prefWidth="994.0" fx:id="pagination" /> -->
             <HBox alignment="CENTER" prefHeight="57.0" prefWidth="994.0">
                <children>
                   <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="511.0" spacing="20.0">
@@ -59,7 +59,7 @@
                                  <children>
                                     <ComboBox prefWidth="150.0" fx:id="comboBoxBusquedaPedidos" />
                                     <TextField promptText="Parámetro de búsqueda" fx:id="tfBuscarSimple"/>
-                                    <Button mnemonicParsing="false" text="Buscar" fx:id="buscarSimple" />
+                                    <Button mnemonicParsing="false" text="Buscar" fx:id="buscarSimple" onAction="#handleBotonBuscarSimple"/>
                                  </children>
                                  <padding>
                                     <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
@@ -86,7 +86,7 @@
                                     <ComboBox prefWidth="150.0" fx:id="comboBoxAreas" />
                                     <DatePicker fx:id="dpfechaEntrada" />
                                     <DatePicker fx:id="dpfechaSalida"/>
-                                    <Button mnemonicParsing="false" text="Buscar" />
+                                    <Button mnemonicParsing="false" text="Buscar" onAction="#handleBotonBuscarAvanzado"/>
                                  </children>
                                  <padding>
                                     <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
@@ -119,6 +119,7 @@
       </VBox>
    </top>
    <center>
+       <VBox fx:id="vbox">
       <TableView fx:id="tablaPedidos" minHeight="-Infinity" minWidth="-Infinity" prefHeight="493.0" prefWidth="994.0" BorderPane.alignment="CENTER">
         <columns>
           <TableColumn fx:id="tbcolnSeguimiento" prefWidth="130.0"  text="Número de seguimiento" />
@@ -128,6 +129,7 @@
             <TableColumn fx:id="tbcolnRepartidor" prefWidth="172.0" text="Repartidor" />
         </columns>
       </TableView>
+      </VBox>
    </center>
    <padding>
       <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />

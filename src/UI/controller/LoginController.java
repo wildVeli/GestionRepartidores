@@ -26,7 +26,7 @@ import javafx.stage.Stage;
 
 /**
  *
- * @author Sergio
+ * @author Sergio López
  */
 public class LoginController{
     

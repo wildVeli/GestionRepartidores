@@ -3,6 +3,26 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
+/*
+FORMA 1 DE LA TABLA
+crea una página cada vez que se pulsa en una nueva página de la paginación
+refresca el ArrayList que ha pedido 1 vez a los datos para refrescar la tabla
+y manda las consultas a los datos
+--No puedo ejecutar los cambios en la tabla
+
+
+FORMA ACTUAL DE LA TABLA
+crea una página cada vez que se pulsa en una nueva página de la paginación, recoge los datos de la capa de datos directamente,
+cada vez que se vuelve a la tabla
+--Funciona
+--No se ordena bien
+
+
+
+
+
+*/
 package UI.controller;
 
 import control.PedidoBean;
@@ -10,6 +30,8 @@ import control.PedidosManager;
 import control.AreaManager;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
@@ -21,6 +43,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -30,10 +53,13 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.DialogPane;
+import javafx.scene.control.Pagination;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -81,6 +107,13 @@ public class GestionPedidosController  {
     private DatePicker dpfechaSalida;
     private AreaManager areaManager;
     private PedidosManager pedidosManager;
+    //Forma1 private ArrayList pedidosData;
+    @FXML
+    private Pagination pagination;
+    private final int  lineasPorPagina=18;
+    @FXML
+    private VBox vbox;
+    private ObservableList pedidosData;
 
     public void setAreaManager(AreaManager areaManager) {
         this.areaManager = areaManager;
@@ -96,7 +129,6 @@ public class GestionPedidosController  {
 
     void initStage(Parent root) {
         stage=new Stage();
-        
         Scene scene=new Scene(root);
         
         stage.setScene(scene);
@@ -148,16 +180,50 @@ public class GestionPedidosController  {
         tbcolDireccion.setCellValueFactory(new PropertyValueFactory<>("destino"));
         tbcolnRepartidor.setCellValueFactory(new PropertyValueFactory<>("repartidor"));
        
-        ObservableList pedidosData = null;
+        pedidosData = null;
+        
         try{
             pedidosData = FXCollections.observableArrayList(pedidosManager.getAllPedidos());
         }catch(Exception e){
             
-        }     
-        tablaPedidos.setItems(pedidosData);
+        }  
+        
+        
+        //Forma1 pedidosData=(ArrayList) pedidosManager.getAllPedidos();
+        pagination();
+        
+        //tablaPedidos.setItems(pedidosData);
         //Añade un listener para reaccinar a la selección de filas de una tabla
         tablaPedidos.getSelectionModel().selectedItemProperty().addListener(this::handlePeidosTableSelectionChanged);
+       
     }
+    
+    //https://docs.oracle.com/javafx/2/ui_controls/pagination.htm
+    //https://gist.github.com/timbuethe/7becdc4556225e7c5b7b
+    private void pagination(){
+        pagination = new Pagination((pedidosData.size() / lineasPorPagina + 1), 0);
+        pagination.setPageFactory(this::createPage);
+        
+        vbox.getChildren().add(new BorderPane(pagination));
+        
+    }
+    private Node createPage(int pageIndex) {
+
+        
+         try{
+            pedidosData = FXCollections.observableArrayList(pedidosManager.getAllPedidos());
+        }catch(Exception e){
+            
+        } 
+        // pedidosData.sort(Comparator.comparingInt());
+        
+        int fromIndex = pageIndex * lineasPorPagina;
+        int toIndex = Math.min(fromIndex + lineasPorPagina, pedidosData.size());
+        tablaPedidos.setItems(FXCollections.observableArrayList(pedidosData.subList(fromIndex, toIndex)));
+
+        return new BorderPane(tablaPedidos);
+    }
+ 
     private void handleTextFieldBuscarSimple (Observable value,String oldValue,String newValue){
         if(!tfBuscarSimple.getText().isEmpty()){
             buscarSimple.setDisable(false);
@@ -192,8 +258,10 @@ public class GestionPedidosController  {
         NuevoPedidoController nuevoPedid=loader.getController();
         nuevoPedid.setTipoVentana("NuevoPedido");
         nuevoPedid.setTablaPedidos(tablaPedidos);
+        //nuevoPedid.setPedidosData(pedidosData);
         nuevoPedid.setPedidosManager(pedidosManager);
         nuevoPedid.initStage(root);    
+        System.out.println("SALGO");
 
     }
     /*
@@ -239,11 +307,47 @@ public class GestionPedidosController  {
         //dialogPane.getStylesheets().add(getClass().getResource("Custom.css").toExternalForm());
         Optional<ButtonType> result = alert.showAndWait();
         if(result.get()==ButtonType.OK){
+            pedidosManager.removePedido(tablaPedidos.getSelectionModel().getSelectedItem().getNSeguimiento());
+        //Forma1  for (Object pedido : pedidosData) {
+         //Forma1      PedidoBean x=(PedidoBean)pedido;
+        //Forma1      if(x.getNSeguimiento()==tablaPedidos.getSelectionModel().getSelectedItem().getNSeguimiento()){
+         //Forma1          pedidosData.remove(pedido);
+          //Forma1      }
+         //Forma1  }
             tablaPedidos.getItems().remove(tablaPedidos.getSelectionModel().getSelectedItem());
+
+            
         }
         
     }
+    @FXML
+    private void handleBotonBuscarSimple (ActionEvent event){
+        
+        ObservableList pedidosData = null;
+        try{
+            pedidosData = FXCollections.observableArrayList
+        (pedidosManager.getPedidosBusquedaSimple(comboBoxBusquedaPedidos.getSelectionModel().getSelectedItem().toString(),tfBuscarSimple.getText()));
+        }catch(Exception e){
+            
+        }     
+        tablaPedidos.setItems(pedidosData);
+    }
     
+    @FXML
+    private void handleBotonBuscarAvanzado (ActionEvent event){
+
+        ObservableList pedidosData = null;
+        try{
+            pedidosData = FXCollections.observableArrayList(        
+        pedidosManager.getPedidosBusquedaAvanzada(comboBoxAreas.getSelectionModel().getSelectedItem().toString()
+                ,dpfechaEntrada
+                ,dpfechaSalida));
+           
+        }catch(Exception e){
+            
+        }
+        tablaPedidos.setItems(pedidosData);
+    }
 }
 
 

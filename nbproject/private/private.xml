@@ -3,11 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/ubuntu/Escritorio/GestionRepartidores-master/src/control/PedidoTestDataGenerator.java</file>
-            <file>file:/home/ubuntu/Escritorio/GestionRepartidores-master/src/UI/view/GestionPedidos.fxml</file>
-            <file>file:/home/ubuntu/Escritorio/GestionRepartidores-master/src/UI/controller/NuevoPedidoController.java</file>
-            <file>file:/home/ubuntu/Escritorio/GestionRepartidores-master/src/UI/controller/GestionPedidosController.java</file>
-            <file>file:/home/ubuntu/Escritorio/GestionRepartidores-master/src/control/PedidosManager.java</file>
+            <file>file:/home/ubuntu/Escritorio/GestionRepartidores/src/UI/controller/GestionRepartidores.java</file>
+            <file>file:/home/ubuntu/Escritorio/GestionRepartidores/src/UI/view/GestionPedidos.fxml</file>
         </group>
     </open-files>
 </project-private>
