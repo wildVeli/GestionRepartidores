@@ -11,9 +11,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
+import java.util.logging.Logger;
 import javafx.beans.Observable;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -24,13 +24,15 @@ import javafx.scene.control.DialogPane;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  *
- * @author Sergio López
+ * @author Sergio López Fuentefría
  */
 public class NuevoPedidoController {
 
+    private static final Logger LOGGER= Logger.getLogger("UI");
     private String tipoVentana;
     private Stage stage;
     @FXML
@@ -92,11 +94,26 @@ public class NuevoPedidoController {
     El botón guardar se deshabilita
     El botón atrás se habilita
      */
+    /**
+     * Primer método del controlador que iniciará todas las bases y mostrara el Stage
+     * @param root contiene el FXML cargado para establecerlo en la nueva escena
+     */
     public void initStage(Parent root) {
         stage = new Stage();
         Scene scene = new Scene(root);
         stage.setScene(scene);
+        stage.setOnShowing(this::handleWindowShowing);
+        stage.show();
 
+       
+
+    }
+     /**
+     * Establece algunos parámetros iniciales de la ventana
+     * @param event parámetro que nos permite controlar acciones sobre quien lanzo el evento
+     */
+    private void handleWindowShowing(WindowEvent event){
+                
         fechaEntrada.setDisable(true);
         numeroSeguimiento.setDisable(true);
         albaran.setDisable(true);
@@ -114,16 +131,21 @@ public class NuevoPedidoController {
             detalles();
 
         }
-        stage.show();
-
     }
-
     /*Botón guardar  pulsación
         Se comprueba que los campos tengan el tipo de dato correcto y se 
         guarda en la base de datos
      */
+    /**
+     * Controla las acciones efectudas por el botón guardar
+     *      -Comprueba que los campos sean correctos
+     *      -Guarda un nuevo pedido en caso de que la ventana este en modo "NuevoPedido"
+     *      o el pedido modificado en caso de estar en modo "Detalles"
+     *
+     */
     @FXML
-    private void handleBotonGuardarAction(ActionEvent event) {
+    private void handleBotonGuardarAction() {
+        //Se comprueba que los campos tengan el dato correcto
         if (repartidor.getText().matches("[0-9]+") && area.getText().matches("[0-9]+")) {
             PedidoBean pedidoBean = new PedidoBean(Integer.valueOf(numeroSeguimiento.getText()),
                     Integer.valueOf(albaran.getText()), fechaEntrada.getText(), fechaSalida.getEditor().getText(),
@@ -131,11 +153,13 @@ public class NuevoPedidoController {
             //Guarda un nuevo pedido
             if (tipoVentana.equals("NuevoPedido")) {
                 pedidosManager.addPedido(pedidoBean);
+                LOGGER.severe("admin añade un nuevo pedido");
 
-                //Modifica un pedido existente de los datos
+            //Modifica un pedido existente de los datos
             } else if (tipoVentana.equals("Detalles")) {
                 tablaPedidos.getItems().remove(pedidoDetalles);
-                pedidosManager.updatePedido(pedidoBean);        
+                pedidosManager.updatePedido(pedidoBean);     
+                LOGGER.severe("admin modifica un pedido");
             }
             tablaPedidos.getItems().add(pedidoBean);
             //tablaPedidos.refresh();
@@ -143,6 +167,7 @@ public class NuevoPedidoController {
             stage.close();
 
         } else {
+            //Especifica la alerta en caso de error
             Alert alert = new Alert(Alert.AlertType.ERROR, "Los campos área y repartidor son númericos");
 
             alert.setTitle("Campos Incorrectos");
@@ -158,11 +183,20 @@ public class NuevoPedidoController {
     /*Botón atras pulsación
     Se cierra la ventana.
      */
+    /**
+     * Controla las acciones efectuadas por el botón "Átras"
+     *      -Cierra la ventana
+     */
     @FXML
-    private void handleBotonAtrasAction(ActionEvent event) {
+    private void handleBotonAtrasAction() {
         stage.close();
     }
-
+    /**
+     * Controla cuando se informa los diferentes campos de texto asociados.
+     * @param value campo que se ha modificado
+     * @param oldValue valor que tenía el objeto que se acaba de modificar
+     * @param newValue valor nuevo que tiene el objeto que se acaba de modificar
+     */
     private void handleTextChangeRequired(Observable value, String oldValue, String newValue) {
         if (!(repartidor.getText().isEmpty() || tipoPago.getText().isEmpty()
                 || destino.getText().isEmpty() || area.getText().isEmpty()
@@ -173,7 +207,9 @@ public class NuevoPedidoController {
         }
 
     }
-
+    /**
+     * Establece párametros iniciales de la ventana en el modo "NuevoPedido"
+     */
     private void nuevoPedido() {
         Random rnd = new Random();
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -184,7 +220,9 @@ public class NuevoPedidoController {
         fechaEntrada.setText(dateFormat.format(date));
         stage.setTitle("Nuevo pedido");
     }
-
+    /**
+     * Establece párametros iniciales de la ventana en el modo "Detalles"
+     */
     private void detalles() {
         stage.setTitle("Detalles pedido");
         numeroSeguimiento.setText(String.valueOf(pedidoDetalles.getNSeguimiento()));
@@ -195,10 +233,6 @@ public class NuevoPedidoController {
         destino.setText(pedidoDetalles.getDestino());
         repartidor.setText(String.valueOf(pedidoDetalles.getRepartidor()));
         area.setText(String.valueOf(pedidoDetalles.getArea()));
-    }
-
-    void setTablaPedidos(TableView<PedidoBean> tablaPedidos, ObservableList pedidosData) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

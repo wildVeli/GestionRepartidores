@@ -8,29 +8,25 @@ package UI.controller;
 import control.AreaManager;
 import control.PedidosManager;
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DialogPane;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 /**
  *
- * @author Sergio López
+ * @author Sergio López Fuentefría
  */
 public class LoginController{
     
-    private static final Logger logger= Logger.getLogger("UI");
+    private static final Logger LOGGER= Logger.getLogger("UI");
     private Stage stage;
     @FXML
     private TextField user;
@@ -61,29 +57,33 @@ public class LoginController{
         stage.show();
         
     }
+    /*
+    Comprueba los datos de inicio de sesión
+    */
     @FXML      
     private void handleLoginButtonAction(ActionEvent event) throws IOException {
         if(!user.getText().trim().equals("") && !password.getText().trim().equals("")){
            //Comprobar en base de datos;
-           if(user.getText().equals("admin")){
-            FXMLLoader loader=new FXMLLoader(getClass().getResource("/UI/view/GestionPedidos.fxml"));
+           if(user.getText().equals("admin")&&password.getText().equals("admin")){
+            FXMLLoader loader=new FXMLLoader(getClass().getResource("/UI/view/G006UI:GestionPedidos.fxml"));
             Parent root=(Parent)loader.load();
             
             GestionPedidosController gestionPedidos=loader.getController();
             gestionPedidos.setPedidosManager(pedidosManager);
             gestionPedidos.setAreaManager(areaManager);
             gestionPedidos.initStage(root);
-        }else{
-               
-        }
-
-
+            LOGGER.info("usuario admin inicio sesión");
+            }else{
+               //Resto de usuarios
+            }
         
        }else{
            Alert alert = new Alert(Alert.AlertType.ERROR, "Introduce un usuario y contraseña");
            DialogPane dialogPane = alert.getDialogPane();
           // dialogPane.getStylesheets().add(getClass().getResource("Custom.css").toExternalForm());
            alert.showAndWait();
+           LOGGER.severe("Intengo de inicio de sesión erroneo con los siguientes datos :    USUARIO: "
+                   +user.getText()+" CONTRASEÑA: "+password.getText());
        }
     }
 

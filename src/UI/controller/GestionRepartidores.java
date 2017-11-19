@@ -13,20 +13,20 @@ import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
  *
- * @author Sergio López
+ * @author Sergio López Fuentefría
  */
 public class GestionRepartidores extends Application {
     
+    private static final Logger LOGGER= Logger.getLogger("UI");
     
     @Override
     public void start(Stage stage) throws Exception {
         
-        FXMLLoader loader=new FXMLLoader(getClass().getResource("/UI/view/login.fxml"));
+        FXMLLoader loader=new FXMLLoader(getClass().getResource("/UI/view/G001UI:Login.fxml"));
         Parent root=(Parent)loader.load();
         
         PedidosManager bussinesslogicController=new PedidoTestDataGenerator();
@@ -40,6 +40,7 @@ public class GestionRepartidores extends Application {
         login.setStage(stage);
         login.initStage(root);
         
+        LOGGER.info("Aplicación iniciada con éxito");
     }
 
     /**

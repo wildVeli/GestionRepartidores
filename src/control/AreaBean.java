@@ -7,7 +7,7 @@ package control;
 
 /**
  *
- * @author ubuntu
+ * @author Sergio López Fuentefría
  */
 public class AreaBean {
     

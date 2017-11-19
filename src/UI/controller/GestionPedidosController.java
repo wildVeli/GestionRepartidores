@@ -29,11 +29,8 @@ import control.PedidoBean;
 import control.PedidosManager;
 import control.AreaManager;
 import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.Observable;
 import javafx.beans.value.ObservableValue;
@@ -42,7 +39,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -66,11 +62,11 @@ import javafx.stage.WindowEvent;
 /**
  * FXML Controller class
  *
- * @author Sergio
+ * @author Sergio López Fuentefría
  */
 public class GestionPedidosController  {
 
-    private static final Logger logger= Logger.getLogger("UI");
+    private static final Logger LOGGER= Logger.getLogger("UI");
 
     private Stage stage;
     @FXML
@@ -126,13 +122,17 @@ public class GestionPedidosController  {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
-
+    /**
+     * Primer método del controlador que iniciará todas las bases y mostrara el Stage
+     * @param root 
+     */
     void initStage(Parent root) {
         stage=new Stage();
         Scene scene=new Scene(root);
         
         stage.setScene(scene);
         stage.setOnShowing(this::handleWindowShowing);
+        stage.setTitle("Gestión de pedidos");
         stage.show();
     }
     /*
@@ -149,10 +149,14 @@ public class GestionPedidosController  {
 
     La ComboBox se búsqueda avanzada se carga con todas las áreas almacenadas en la base de datos.
     */
+    /**
+     * Establece algunos parámetros iniciales de la ventana
+     * @param event parámetro que nos permite controlar acciones sobre quien lanzo el evento
+     */
     private void handleWindowShowing(WindowEvent event){
         
         
-        logger.info("Beginning LoginController::handleWindowShowing");
+        LOGGER.info("Beginning LoginController::handleWindowShowing");
         detalles.setDisable(true);
         eliminar.setDisable(true);
         buscarSimple.setDisable(true);
@@ -200,6 +204,9 @@ public class GestionPedidosController  {
     
     //https://docs.oracle.com/javafx/2/ui_controls/pagination.htm
     //https://gist.github.com/timbuethe/7becdc4556225e7c5b7b
+    /**
+     * Crea una paginación acorde a los datos necesitados
+     */
     private void pagination(){
         pagination = new Pagination((pedidosData.size() / lineasPorPagina + 1), 0);
         pagination.setPageFactory(this::createPage);
@@ -207,6 +214,11 @@ public class GestionPedidosController  {
         vbox.getChildren().add(new BorderPane(pagination));
         
     }
+    /**
+     * Crea una nueva página de la paginación con los datos comprendidos en el rango correspondiente a dicha página.
+     * @param pageIndex numero de página de la paginación que se creará
+     * @return devuelve un borderPane que contendrá una tabla con los datos que corresponden, segun la página actual.
+     */
     private Node createPage(int pageIndex) {
 
         
@@ -224,7 +236,19 @@ public class GestionPedidosController  {
         return new BorderPane(tablaPedidos);
     }
  
+    /*
+       Campo de texto de búsqueda de pedidos
+    Cambio de texto
+    El botón buscar se habilita
+    */
+    /**
+     * Controla cuando se informa el campo de texto BuscarSimple, para habilitar o deshabilitar el botón buscar
+     * @param value campo que se ha modificado
+     * @param oldValue valor que tenía el objeto que se acaba de modificar
+     * @param newValue valor nuevo que tiene el objeto que se acaba de modificar
+     */
     private void handleTextFieldBuscarSimple (Observable value,String oldValue,String newValue){
+        
         if(!tfBuscarSimple.getText().isEmpty()){
             buscarSimple.setDisable(false);
         }else{
@@ -236,6 +260,12 @@ public class GestionPedidosController  {
     Selección
     Habilita los botones Detalles y Eliminaral seleccionar una fila de la tabla
     */
+    /**
+     * Controla la selección de una fila de la tabla,activa los botones "detalles" y "eliminar"
+     * @param observable campo que se ha modificado
+     * @param oldValue valor que tenía el objeto que se acaba de modificar
+     * @param newValue valor nuevo que tiene el objeto que se acaba de modificar
+     */
     private void handlePeidosTableSelectionChanged(ObservableValue observable,Object oldValue,Object newValue){
         //Si se ha seleccionado una fila de la tabla,
         //Habilitar los botones de detalles y eliminar
@@ -244,16 +274,25 @@ public class GestionPedidosController  {
             detalles.setDisable(false);
             eliminar.setDisable(false);
         }
+        LOGGER.info("Fila de la tabla seleccionada");
     }
     /*
         Botón de nuevo pedido...
     Pulsación
     Abre la ventana Nuevo pedido con un String "NuevoPedido" , refrescar la tabla al volver a la ventana anterior
     */
+    /**
+     * Carga la ventana G007UI:NuevoPedido con el parámetro "NuevoPedido" y su controlador
+     */
     @FXML
-    private void handleBotonNuevoPedidoAction(ActionEvent event) throws IOException{
-        FXMLLoader loader= new FXMLLoader(getClass().getResource("/UI/view/NuevoPedido.fxml"));
-        Parent root=(Parent)loader.load();
+    private void handleBotonNuevoPedidoAction(){
+        FXMLLoader loader= new FXMLLoader(getClass().getResource("/UI/view/G007UI:NuevoPedido.fxml"));
+        Parent root = null;
+        try {
+            root = (Parent)loader.load();
+        } catch (IOException ex) {
+            Logger.getLogger(GestionPedidosController.class.getName()).log(Level.SEVERE, null, ex);
+        }
             
         NuevoPedidoController nuevoPedid=loader.getController();
         nuevoPedid.setTipoVentana("NuevoPedido");
@@ -261,7 +300,6 @@ public class GestionPedidosController  {
         //nuevoPedid.setPedidosData(pedidosData);
         nuevoPedid.setPedidosManager(pedidosManager);
         nuevoPedid.initStage(root);    
-        System.out.println("SALGO");
 
     }
     /*
@@ -269,9 +307,14 @@ public class GestionPedidosController  {
     Pulsación
     Muestra un diálogo de confirmación y cierra la ventana en caso afirmativo.
     */
+    /**
+     * Cierra la ventana
+     */
     @FXML
-    private void handleBotonSalirAction(ActionEvent event){
+    private void handleBotonSalirAction(){
+        LOGGER.info("admin sale de la aplicación");
         stage.close();
+        
     }
     /*
     Pulsación
@@ -280,17 +323,28 @@ public class GestionPedidosController  {
     Si hay una fila seleccionada.
     
     */
+    /**
+     * Abre la ventana G007UI:NuevoPedido con el parámetro de "Detalles" y su controlador
+     */
     @FXML
-    private void handleBotonDetallesAction(ActionEvent event) throws IOException{
-        FXMLLoader loader= new FXMLLoader(getClass().getResource("/UI/view/NuevoPedido.fxml"));
-        Parent root=(Parent)loader.load();
-            
+    private void handleBotonDetallesAction() {
+       
+        FXMLLoader loader= new FXMLLoader(getClass().getResource("/UI/view/G007UI:NuevoPedido.fxml"));
+        Parent root = null;
+        try {
+            root = (Parent)loader.load();
+        } catch (IOException ex) {
+            Logger.getLogger(GestionPedidosController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         NuevoPedidoController nuevoPedid=loader.getController();
         nuevoPedid.setTipoVentana("Detalles");
         nuevoPedid.setTablaPedidos(tablaPedidos);
         nuevoPedid.setPedidosManager(pedidosManager);
         nuevoPedid.setPedidoDetalles((PedidoBean)tablaPedidos.getSelectionModel().getSelectedItem());
         nuevoPedid.initStage(root); 
+        LOGGER.info("comprueba detalles de un pedido");
+        
     }
     /*
         Botón Eliminar
@@ -298,8 +352,11 @@ public class GestionPedidosController  {
     Muestra un cuadro de diálogo de confirmación de borrado del pedido seleccionado en la tabla
     Y si confirma borrado eliminar el pedido seleccionado de la colección de pedidos y refrescar la tabla.
     */
+    /**
+     * Elimina el pedido seleccionado
+     */
     @FXML
-    private void handleBotonEliminarAction(ActionEvent event){
+    private void handleBotonEliminarAction(){
         Alert alert = new Alert(AlertType.CONFIRMATION,"¿Está seguro de que desea eliminar el pedido? ");
         DialogPane dialogPane = alert.getDialogPane();
         alert.setHeaderText("Confirmación");
@@ -315,13 +372,21 @@ public class GestionPedidosController  {
           //Forma1      }
          //Forma1  }
             tablaPedidos.getItems().remove(tablaPedidos.getSelectionModel().getSelectedItem());
-
+             LOGGER.info("El admin manda eliminar un pedido");
             
         }
         
     }
     @FXML
-    private void handleBotonBuscarSimple (ActionEvent event){
+    /*
+        Botón buscar simple
+    Pulsación
+    Rellena la tabla aplicando los criterios de búsqueda seleccionados en la pestaña
+    */
+    /**
+     * Efectua una búsqueda simple por los criterios de "comboBoxBusquedaPedidos" y "tfBuscarSimple", mostrando el resultado en la tabla
+     */
+    private void handleBotonBuscarSimple (){
         
         ObservableList pedidosData = null;
         try{
@@ -331,9 +396,18 @@ public class GestionPedidosController  {
             
         }     
         tablaPedidos.setItems(pedidosData);
+        LOGGER.info("Búsqueda realizada por criterio :"+comboBoxBusquedaPedidos.getSelectionModel().getSelectedItem().toString()+" buscado: "+tfBuscarSimple.getText());
     }
     
     @FXML
+    /*
+        Botón buscar avanzado
+    Pulsación
+    Rellena la tabla aplicando los criterios de búsqueda seleccionados en la pestaña
+    */
+    /**
+     * Efectua una búsqueda por los criterios de "comboBoxAreas" y las fechas "dpfechaEntrada" y "dpfechaSalida", muestra el resultado en la tabla
+     */
     private void handleBotonBuscarAvanzado (ActionEvent event){
 
         ObservableList pedidosData = null;
@@ -346,23 +420,15 @@ public class GestionPedidosController  {
         }catch(Exception e){
             
         }
+        
         tablaPedidos.setItems(pedidosData);
+        LOGGER.info("Búsqueda realizada área: "+comboBoxAreas.getSelectionModel().getSelectedItem().toString()+
+                " fecha inicio: "+dpfechaEntrada.getEditor().getText()+" fecha salida: "+dpfechaSalida.getEditor().getText());
     }
 }
 
 
 /*
-ComBox de búsqueda de pedido
-Selección
-Se habilita el campo de texto de búsqueda de pedidos
-
-Campo de texto de búsqueda de pedidos
-Cambio de texto
-El botón buscar se habilita
-
-Botón buscar
-Pulsación
-Rellena la tabla aplicando los criterios de búsqueda seleccionados en la pestaña
 
 Combobox de búsqueda avanzada
 Selección

@@ -5,66 +5,90 @@
  */
 package control;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
 
 /**
  *
  * @author Sergio López
+ * Maneja los datos de pedidos, simulación de la capa de datos
+ * 
  */
 public class PedidoTestDataGenerator implements PedidosManager{
     
-    private static final Logger logger=Logger.getLogger("control");
+    private static final Logger LOGGER=Logger.getLogger("control");
     private ArrayList<PedidoBean>  pedidos;
 
-    
+    /**
+     * Genera unos pedidos de prueba
+     */
     public PedidoTestDataGenerator() {
         pedidos=new ArrayList();
         for (int i = 0; i < 25; i++) {
             pedidos.add(new PedidoBean(i,i,i+"/1/2017",i+"/2/2017","Bilbao"+i,"A",i,i));
+            LOGGER.info("Generando pedidos de prueba");
         }
     }
     
+    /**
+     * Añade un pedido a los existentes
+     * @param pedidoBean pedido que se añadirá a la colección
+     */
     @Override
     public void addPedido(PedidoBean pedidoBean){
         pedidos.add(pedidoBean);
+        LOGGER.info("Nuevo pedido añadido a los datos");
     }
+    /**
+     * Devuelve todos los pedidos
+     * @return colleción con todos los pedidos
+     */
     @Override
     public Collection getAllPedidos() {
-        logger.info("Getting all pedidos");
+        LOGGER.info("Getting all pedidos");
         return pedidos;
     }
+    /**
+     * 
+     * @param nSeguimiento 
+     */
     @Override
     public void pedidoExiste(Integer nSeguimiento){
-        logger.info("Valida nSeguimiento existance");
+        LOGGER.info("Valida nSeguimiento existance");
         /*for
         if(){
-            logger.severe("nSeguimiento already exist.");
+            LOGGER.severe("nSeguimiento already exist.");
             //excepion
         }
         */
     }
 
+    /**
+     * Remplaza cierta información de un pedido
+     * @param pedidoBean pedido que contiene la nueva información modificada
+     */
     @Override
     public void updatePedido(PedidoBean pedidoBean) {
         for (PedidoBean pedido : pedidos) {
             if(pedido.getNSeguimiento().equals(pedidoBean.getNSeguimiento())){
                 pedidos.remove(pedido);
                 pedidos.add(pedidoBean);
+                LOGGER.info("Pedido modificado en los datos");
                 break;
             }
         }
     }
 
+    /**
+     * Efectua una selección de ciertos pedidos según unos parámetros
+     * @param selectedItem contiene porque parámetro se filtrará
+     * @param tfBuscarSimple texto del usuario para filtrar la búsqueda
+     * @return colección de pedidos que cuadren con los parámetros de búsqueda
+     */
     @Override
     public Collection getPedidosBusquedaSimple(String selectedItem, String tfBuscarSimple) {
         Collection busqueda = null;
@@ -85,6 +109,13 @@ public class PedidoTestDataGenerator implements PedidosManager{
         return busqueda;
     }
 
+    /**
+     * Efectua una selección de ciertos pedidos según unos parámetros
+     * @param selectedItem  área seleccionada por la que se filtrará
+     * @param dpfechaEntrada contiene la fecha de inicio con la que se filtrará
+     * @param dpfechaSalida contiene la fecha final con la que se filtrará
+     * @return colección de pedidos que cuadren con los parámetros de búsqueda
+     */
     @Override
     public Collection getPedidosBusquedaAvanzada(String selectedItem, DatePicker dpfechaEntrada, DatePicker dpfechaSalida) {
         
@@ -96,8 +127,6 @@ public class PedidoTestDataGenerator implements PedidosManager{
             
             boolean bEntrada = true;
             boolean bSalida = true;
-            System.out.println("salida "+sdf.parse(dpfechaSalida.getEditor().getText()));
-            System.out.println("entrada "+dpfechaEntrada.getEditor().getText());
             boolean guardar;
             for (PedidoBean pedido : pedidos) {
                 guardar = true;
@@ -112,7 +141,6 @@ public class PedidoTestDataGenerator implements PedidosManager{
                     busqueda.add(pedido);
                 }
             }
-            System.out.println(busqueda.size());
             
         }catch(Exception e){
             
@@ -120,11 +148,16 @@ public class PedidoTestDataGenerator implements PedidosManager{
         return busqueda;
     }
 
+    /**
+     * Elimina un pedido
+     * @param nSeguimiento número de seguimiento del pedido a eliminar
+     */
     @Override
     public void removePedido(Integer nSeguimiento) {
         for (PedidoBean pedido : pedidos) {
             if(nSeguimiento==pedido.getNSeguimiento()){
                 pedidos.remove(pedido);
+                LOGGER.info("pedido eliminado de los datos");
                 break;
             }
             
