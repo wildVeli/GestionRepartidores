@@ -9,6 +9,8 @@ import control.PedidoBean;
 import control.PedidosManager;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Random;
 import java.util.logging.Logger;
@@ -25,6 +27,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.util.StringConverter;
 
 /**
  *
@@ -59,6 +62,7 @@ public class NuevoPedidoController {
     private PedidoBean pedidoDetalles;
     private PedidosManager pedidosManager;
     private ObservableList pedidosData;
+    private String pattern="dd/MM/yyyy";
 
     public void setPedidosData(ObservableList pedidosData) {
         this.pedidosData = pedidosData;
@@ -131,6 +135,28 @@ public class NuevoPedidoController {
             detalles();
 
         }
+        
+        StringConverter converter = new StringConverter<LocalDate>() {
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(pattern);
+            @Override
+            public String toString(LocalDate date) {
+                if (date != null) {
+                    return dateFormatter.format(date);
+                } else {
+                    return "";
+                }
+            }
+            @Override
+            public LocalDate fromString(String string) {
+                if (string != null && !string.isEmpty()) {
+                    return LocalDate.parse(string, dateFormatter);
+                } else {
+                    return null;
+                }
+            }
+        };             
+        fechaSalida.setConverter(converter);
+        
     }
     /*Botón guardar  pulsación
         Se comprueba que los campos tengan el tipo de dato correcto y se 

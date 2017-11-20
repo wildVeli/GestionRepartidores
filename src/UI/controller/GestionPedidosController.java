@@ -29,6 +29,8 @@ import control.PedidoBean;
 import control.PedidosManager;
 import control.AreaManager;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,6 +60,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.util.StringConverter;
 
 /**
  * FXML Controller class
@@ -110,6 +113,7 @@ public class GestionPedidosController  {
     @FXML
     private VBox vbox;
     private ObservableList pedidosData;
+    private String pattern="dd/MM/yyyy";
 
     public void setAreaManager(AreaManager areaManager) {
         this.areaManager = areaManager;
@@ -200,6 +204,27 @@ public class GestionPedidosController  {
         //Añade un listener para reaccinar a la selección de filas de una tabla
         tablaPedidos.getSelectionModel().selectedItemProperty().addListener(this::handlePeidosTableSelectionChanged);
        
+                StringConverter converter = new StringConverter<LocalDate>() {
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(pattern);
+            @Override
+            public String toString(LocalDate date) {
+                if (date != null) {
+                    return dateFormatter.format(date);
+                } else {
+                    return "";
+                }
+            }
+            @Override
+            public LocalDate fromString(String string) {
+                if (string != null && !string.isEmpty()) {
+                    return LocalDate.parse(string, dateFormatter);
+                } else {
+                    return null;
+                }
+            }
+        };             
+        dpfechaEntrada.setConverter(converter);
+        dpfechaSalida.setConverter(converter);
     }
     
     //https://docs.oracle.com/javafx/2/ui_controls/pagination.htm

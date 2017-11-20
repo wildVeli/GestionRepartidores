@@ -23,15 +23,17 @@ import javafx.scene.control.DatePicker;
 public class PedidoTestDataGenerator implements PedidosManager{
     
     private static final Logger LOGGER=Logger.getLogger("control");
-    private ArrayList<PedidoBean>  pedidos;
+    private final ArrayList<PedidoBean>  pedidos;
+    private String formato = "dd/MM/yyyy";
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(formato);
 
     /**
      * Genera unos pedidos de prueba
      */
     public PedidoTestDataGenerator() {
         pedidos=new ArrayList();
-        for (int i = 0; i < 25; i++) {
-            pedidos.add(new PedidoBean(i,i,i+"/1/2017",i+"/2/2017","Bilbao"+i,"A",i,i));
+        for (int i = 10; i < 28; i++) {
+            pedidos.add(new PedidoBean(i,i,i+"/01/2017",i+"/01/2017","Bilbao"+i,"A",i,i));
             LOGGER.info("Generando pedidos de prueba");
         }
     }
@@ -86,7 +88,7 @@ public class PedidoTestDataGenerator implements PedidosManager{
     }
 
     /**
-     * Efectua una selección de ciertos pedidos según unos parámetros
+     * Efectúa una selección de ciertos pedidos según unos parámetros
      * @param selectedItem contiene porque parámetro se filtrará
      * @param tfBuscarSimple texto del usuario para filtrar la búsqueda
      * @return colección de pedidos que cuadren con los parámetros de búsqueda
@@ -112,7 +114,7 @@ public class PedidoTestDataGenerator implements PedidosManager{
     }
 
     /**
-     * Efectua una selección de ciertos pedidos según unos parámetros
+     * Efectúa una selección de ciertos pedidos según unos parámetros
      * @param selectedItem  área seleccionada por la que se filtrará
      * @param dpfechaEntrada contiene la fecha de inicio con la que se filtrará
      * @param dpfechaSalida contiene la fecha final con la que se filtrará
@@ -121,38 +123,25 @@ public class PedidoTestDataGenerator implements PedidosManager{
     @Override
     public Collection getPedidosBusquedaAvanzada(String selectedItem, LocalDate dpfechaEntrada, LocalDate dpfechaSalida) {
         
-        Collection busqueda = pedidos;
-        /*
-       // SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-       
-        LOGGER.info(dpfechaEntrada.toString());
-        String x = pedidos.get(1).getFechaEntrada();
-        x=LocalDate.parse(x, formatter).toString();
-        String y= dpfechaEntrada.format(formatter);
-        dpfechaEntrada.format(formatter);
-        dpfechaSalida.format(formatter);
-        LOGGER.info(dpfechaEntrada.toString());
+        Collection<PedidoBean> busqueda = null;
 
-        LOGGER.info(LocalDate.parse(x, formatter).toString());
-        */
-        //this.pedidos=(ArrayList<PedidoBean>) busqueda;
-        
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+       
         //NO SALE EN EL LOGGER!
         //NO SE PARA EL DEBUG
         LOGGER.severe("fecha clase :" +LocalDate.parse(pedidos.get(1).getFechaEntrada(), formatter));
         LOGGER.severe("hola "+dpfechaEntrada);
         
         if(dpfechaEntrada!=null){
+            
              busqueda = pedidos.stream().filter(c -> LocalDate.parse(c.getFechaEntrada(), formatter).compareTo(dpfechaEntrada)>=0)
                                .collect(Collectors.toList());
         }
         if(dpfechaSalida!=null){
-             busqueda = pedidos.stream().filter(c -> LocalDate.parse(c.getFechaSalida(), formatter).compareTo(dpfechaSalida)<=0)
+             busqueda = busqueda.stream().filter(c -> LocalDate.parse(c.getFechaSalida(), formatter).compareTo(dpfechaSalida)<=0)
                                .collect(Collectors.toList());
         }
         if(!selectedItem.equals("Todas las áreas")){
-            busqueda = pedidos.stream().filter(c ->c.getArea().equals(selectedItem)).collect(Collectors.toList());
+            busqueda = busqueda.stream().filter(c ->c.getArea().equals(selectedItem)).collect(Collectors.toList());
         }
         LOGGER.info("Búsqueda finalizada "+busqueda.size()+" resultados");
 
