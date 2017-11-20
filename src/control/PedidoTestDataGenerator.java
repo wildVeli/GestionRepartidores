@@ -5,14 +5,16 @@
  */
 package control;
 
+
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import javafx.scene.control.DatePicker;
 
 /**
  *
@@ -25,15 +27,16 @@ public class PedidoTestDataGenerator implements PedidosManager{
     private static final Logger LOGGER=Logger.getLogger("control");
     private final ArrayList<PedidoBean>  pedidos;
     private String formato = "dd/MM/yyyy";
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(formato);
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(formato);
+
 
     /**
      * Genera unos pedidos de prueba
      */
     public PedidoTestDataGenerator() {
         pedidos=new ArrayList();
-        for (int i = 10; i < 28; i++) {
-            pedidos.add(new PedidoBean(i,i,i+"/01/2017",i+"/01/2017","Bilbao"+i,"A",i,i));
+        for (int i = 10; i < 31; i++) {
+            pedidos.add(new PedidoBean(i,i,i+"/01/2017",i+1+"/01/2017","Bilbao"+i,"A",i,i));
             LOGGER.info("Generando pedidos de prueba");
         }
     }
@@ -56,20 +59,7 @@ public class PedidoTestDataGenerator implements PedidosManager{
         LOGGER.info("Getting all pedidos");
         return pedidos;
     }
-    /**
-     * 
-     * @param nSeguimiento 
-     */
-    @Override
-    public void pedidoExiste(Integer nSeguimiento){
-        LOGGER.info("Valida nSeguimiento existance");
-        /*for
-        if(){
-            LOGGER.severe("nSeguimiento already exist.");
-            //excepion
-        }
-        */
-    }
+    
 
     /**
      * Remplaza cierta información de un pedido
@@ -121,13 +111,11 @@ public class PedidoTestDataGenerator implements PedidosManager{
      * @return colección de pedidos que cuadren con los parámetros de búsqueda
      */
     @Override
-    public Collection getPedidosBusquedaAvanzada(String selectedItem, LocalDate dpfechaEntrada, LocalDate dpfechaSalida) {
+    public Collection getPedidosBusquedaAvanzada(String selectedItem, LocalDate dpfechaEntrada, LocalDate dpfechaSalida,AreaManager areaManager) {
         
         Collection<PedidoBean> busqueda = null;
 
-       
-        //NO SALE EN EL LOGGER!
-        //NO SE PARA EL DEBUG
+        int numeroArea=areaManager.getNumeroArea(selectedItem);
         LOGGER.severe("fecha clase :" +LocalDate.parse(pedidos.get(1).getFechaEntrada(), formatter));
         LOGGER.severe("hola "+dpfechaEntrada);
         
@@ -141,7 +129,7 @@ public class PedidoTestDataGenerator implements PedidosManager{
                                .collect(Collectors.toList());
         }
         if(!selectedItem.equals("Todas las áreas")){
-            busqueda = busqueda.stream().filter(c ->c.getArea().equals(selectedItem)).collect(Collectors.toList());
+            busqueda = busqueda.stream().filter(c ->c.getArea().equals(numeroArea)).collect(Collectors.toList());
         }
         LOGGER.info("Búsqueda finalizada "+busqueda.size()+" resultados");
 
@@ -163,5 +151,19 @@ public class PedidoTestDataGenerator implements PedidosManager{
             
         }
     }
+
+    /**
+     * Crea los datos para un nuevo pedido
+     * @return devuelve un nuevo pedido con los datos basicos generados en base a los pedidos existentes
+     */
+    @Override
+    public PedidoBean getDatosNuevoPedido(){
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = new Date();
+        PedidoBean pedido=new PedidoBean(pedidos.get(pedidos.size()-1).getNSeguimiento()+1
+                ,pedidos.get(pedidos.size()-1).getAlbaran()+1,dateFormat.format(date),"","","",0,0);
+        return pedido;
+    }
+
 
 }

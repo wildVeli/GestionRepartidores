@@ -86,7 +86,7 @@
                                     <ComboBox prefWidth="150.0" fx:id="comboBoxAreas" />
                                     <DatePicker fx:id="dpfechaEntrada" />
                                     <DatePicker fx:id="dpfechaSalida"/>
-                                    <Button mnemonicParsing="false" text="Buscar" onAction="#handleBotonBuscarAvanzado"/>
+                                    <Button mnemonicParsing="false" text="Buscar" onAction="#handleBotonBuscarAvanzado" fx:id="buscarAvanzado"/>
                                  </children>
                                  <padding>
                                     <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />

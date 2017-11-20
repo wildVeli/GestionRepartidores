@@ -7,12 +7,8 @@ package UI.controller;
 
 import control.PedidoBean;
 import control.PedidosManager;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.Random;
 import java.util.logging.Logger;
 import javafx.beans.Observable;
 import javafx.collections.ObservableList;
@@ -27,7 +23,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import javafx.util.StringConverter;
 
 /**
  *
@@ -62,7 +57,9 @@ public class NuevoPedidoController {
     private PedidoBean pedidoDetalles;
     private PedidosManager pedidosManager;
     private ObservableList pedidosData;
-    private String pattern="dd/MM/yyyy";
+    private String formato = "dd/MM/yyyy";
+    private StringConverterDate converter=new StringConverterDate();
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(formato);
 
     public void setPedidosData(ObservableList pedidosData) {
         this.pedidosData = pedidosData;
@@ -135,27 +132,8 @@ public class NuevoPedidoController {
             detalles();
 
         }
-        
-        StringConverter converter = new StringConverter<LocalDate>() {
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(pattern);
-            @Override
-            public String toString(LocalDate date) {
-                if (date != null) {
-                    return dateFormatter.format(date);
-                } else {
-                    return "";
-                }
-            }
-            @Override
-            public LocalDate fromString(String string) {
-                if (string != null && !string.isEmpty()) {
-                    return LocalDate.parse(string, dateFormatter);
-                } else {
-                    return null;
-                }
-            }
-        };             
-        fechaSalida.setConverter(converter);
+                 
+        fechaSalida.setConverter(converter.getConverter());
         
     }
     /*Botón guardar  pulsación
@@ -172,37 +150,47 @@ public class NuevoPedidoController {
     @FXML
     private void handleBotonGuardarAction() {
         //Se comprueba que los campos tengan el dato correcto
-        if (repartidor.getText().matches("[0-9]+") && area.getText().matches("[0-9]+")) {
+        if(fechaSalida.getValue().compareTo(LocalDate.parse(fechaEntrada.getText(),formatter))<0){
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Fecha salida no debe ser anterior fecha entrada");
+                DialogPane dialogPane = alert.getDialogPane();
+                        alert.setHeaderText("Fecha salida erronea");
+               // dialogPane.getStylesheets().add(getClass().getResource("Custom.css").toExternalForm());
+                alert.showAndWait();
+        }else{
+        
+            if (repartidor.getText().matches("[0-9]+") && area.getText().matches("[0-9]+")) {
             PedidoBean pedidoBean = new PedidoBean(Integer.valueOf(numeroSeguimiento.getText()),
                     Integer.valueOf(albaran.getText()), fechaEntrada.getText(), fechaSalida.getEditor().getText(),
                     destino.getText(), tipoPago.getText(), Integer.valueOf(repartidor.getText()), Integer.valueOf(area.getText()));
-            //Guarda un nuevo pedido
-            if (tipoVentana.equals("NuevoPedido")) {
-                pedidosManager.addPedido(pedidoBean);
-                LOGGER.info("admin añade un nuevo pedido");
+                //Guarda un nuevo pedido
+                if (tipoVentana.equals("NuevoPedido")) {
+                    pedidosManager.addPedido(pedidoBean);
+                    LOGGER.info("admin añade un nuevo pedido");
 
-            //Modifica un pedido existente de los datos
-            } else if (tipoVentana.equals("Detalles")) {
-                tablaPedidos.getItems().remove(pedidoDetalles);
-                pedidosManager.updatePedido(pedidoBean);     
-                LOGGER.info("admin modifica un pedido");
+                //Modifica un pedido existente de los datos
+                } else if (tipoVentana.equals("Detalles")) {
+                    tablaPedidos.getItems().remove(pedidoDetalles);
+                    pedidosManager.updatePedido(pedidoBean);     
+                    LOGGER.info("admin modifica un pedido");
+                }
+                tablaPedidos.getItems().add(pedidoBean);
+                tablaPedidos.refresh();
+
+                stage.close();
+
+            } else {
+                //Especifica la alerta en caso de error
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Los campos área y repartidor son númericos");
+
+                alert.setTitle("Campos Incorrectos");
+                alert.setHeaderText("Corrija los campos");
+                DialogPane dialogPane = alert.getDialogPane();
+
+                // dialogPane.getStylesheets().add(getClass().getResource("Custom.css").toExternalForm());
+                alert.showAndWait();
             }
-            tablaPedidos.getItems().add(pedidoBean);
-            //tablaPedidos.refresh();
+       }
 
-            stage.close();
-
-        } else {
-            //Especifica la alerta en caso de error
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Los campos área y repartidor son númericos");
-
-            alert.setTitle("Campos Incorrectos");
-            alert.setHeaderText("Corrija los campos");
-            DialogPane dialogPane = alert.getDialogPane();
-
-            // dialogPane.getStylesheets().add(getClass().getResource("Custom.css").toExternalForm());
-            alert.showAndWait();
-        }
 
     }
 
@@ -237,13 +225,17 @@ public class NuevoPedidoController {
      * Establece párametros iniciales de la ventana en el modo "NuevoPedido"
      */
     private void nuevoPedido() {
-        Random rnd = new Random();
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        
+      
+        /*DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Date date = new Date();
+        ArrayList<PedidoBean> x = (ArrayList)pedidosManager.getAllPedidos();
+         */
+        PedidoBean x = pedidosManager.getDatosNuevoPedido();
         guardar.setDisable(true);
-        numeroSeguimiento.setText(String.valueOf(rnd.nextInt()));
-        albaran.setText(String.valueOf(rnd.nextInt()));
-        fechaEntrada.setText(dateFormat.format(date));
+        numeroSeguimiento.setText(String.valueOf(x.getNSeguimiento()));
+        albaran.setText(String.valueOf(x.getAlbaran()));
+        fechaEntrada.setText(x.getFechaEntrada());
         stage.setTitle("Nuevo pedido");
     }
     /**
@@ -254,7 +246,7 @@ public class NuevoPedidoController {
         numeroSeguimiento.setText(String.valueOf(pedidoDetalles.getNSeguimiento()));
         fechaEntrada.setText(pedidoDetalles.getFechaEntrada());
         albaran.setText(String.valueOf(pedidoDetalles.getAlbaran()));
-        fechaSalida.getEditor().setText(pedidoDetalles.getFechaSalida());
+        fechaSalida.setValue(LocalDate.parse(pedidoDetalles.getFechaSalida(),formatter));
         tipoPago.setText(pedidoDetalles.gettPago());
         destino.setText(pedidoDetalles.getDestino());
         repartidor.setText(String.valueOf(pedidoDetalles.getRepartidor()));

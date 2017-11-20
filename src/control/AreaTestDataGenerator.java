@@ -19,15 +19,16 @@ public class AreaTestDataGenerator implements AreaManager {
     
     private static final Logger LOGGER=Logger.getLogger("control");
     private ArrayList<AreaBean> areas;
+    
 
     /**
-     * Genera datos de prueba de las areas
+     * Genera datos de prueba de las áreas
      */
     @Override
     public void AreaTestDataGenerator(){
         areas=new ArrayList();
-        for (int i = 0; i < 10; i++) {
-            areas.add(new AreaBean(i,"Bilbao"+i,"Bonito",i+1));  
+        for (int i = 10; i < 31; i++) {
+            areas.add(new AreaBean(i,"GranBilbao"+i,"Bonito",i+1));  
             LOGGER.info("Generando áreas de prueba");
         }
     }
@@ -41,7 +42,22 @@ public class AreaTestDataGenerator implements AreaManager {
         LOGGER.info("Devolviendo todas las áreas");
         return areaNames;
     }
-    
+    /**
+     * Busca el CP correspondiente al nombre de un área
+     * @param selectedItem nombre del área que se consultará
+     * @return Devuelve el CP correspondiente a un área
+     */
+    @Override
+    public int getNumeroArea(String selectedItem){
+        int cpArea=0;
+        for (AreaBean area : areas) {
+            if(area.getNombre().equals(selectedItem)){
+                cpArea=area.getCp();
+                break;
+            }
+        }
+        return cpArea;
+    }
     
     
 }

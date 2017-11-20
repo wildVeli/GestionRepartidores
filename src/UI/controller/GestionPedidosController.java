@@ -29,8 +29,6 @@ import control.PedidoBean;
 import control.PedidosManager;
 import control.AreaManager;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -60,10 +58,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import javafx.util.StringConverter;
+
 
 /**
- * FXML Controller class
+ * 
  *
  * @author Sergio López Fuentefría
  */
@@ -99,6 +97,8 @@ public class GestionPedidosController  {
     @FXML
     private Button buscarSimple;
     @FXML
+    private Button buscarAvanzado;
+    @FXML
     private TextField tfBuscarSimple;
     @FXML
     private DatePicker dpfechaEntrada;
@@ -114,6 +114,7 @@ public class GestionPedidosController  {
     private VBox vbox;
     private ObservableList pedidosData;
     private String pattern="dd/MM/yyyy";
+    private StringConverterDate converter=new StringConverterDate();
 
     public void setAreaManager(AreaManager areaManager) {
         this.areaManager = areaManager;
@@ -167,7 +168,7 @@ public class GestionPedidosController  {
         tfBuscarSimple.textProperty().addListener(this::handleTextFieldBuscarSimple);
         dpfechaEntrada.setPromptText("Fecha entrada");
         dpfechaSalida.setPromptText("Fecha salida");
-        
+
         
         comboBoxBusquedaPedidos.getItems().add("N.Seguimiento");
         comboBoxBusquedaPedidos.getItems().add("Destino");
@@ -204,27 +205,9 @@ public class GestionPedidosController  {
         //Añade un listener para reaccinar a la selección de filas de una tabla
         tablaPedidos.getSelectionModel().selectedItemProperty().addListener(this::handlePeidosTableSelectionChanged);
        
-                StringConverter converter = new StringConverter<LocalDate>() {
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(pattern);
-            @Override
-            public String toString(LocalDate date) {
-                if (date != null) {
-                    return dateFormatter.format(date);
-                } else {
-                    return "";
-                }
-            }
-            @Override
-            public LocalDate fromString(String string) {
-                if (string != null && !string.isEmpty()) {
-                    return LocalDate.parse(string, dateFormatter);
-                } else {
-                    return null;
-                }
-            }
-        };             
-        dpfechaEntrada.setConverter(converter);
-        dpfechaSalida.setConverter(converter);
+            
+        dpfechaEntrada.setConverter(converter.getConverter());
+        dpfechaSalida.setConverter(converter.getConverter());
     }
     
     //https://docs.oracle.com/javafx/2/ui_controls/pagination.htm
@@ -280,6 +263,7 @@ public class GestionPedidosController  {
             buscarSimple.setDisable(true);
         }
     }
+
     /*
         Tabla
     Selección
@@ -435,36 +419,37 @@ public class GestionPedidosController  {
      */
     private void handleBotonBuscarAvanzado (ActionEvent event){
 
-        ObservableList pedidosData = null;
-        try{
-            pedidosData = FXCollections.observableArrayList(        
-        pedidosManager.getPedidosBusquedaAvanzada(comboBoxAreas.getSelectionModel().getSelectedItem().toString()
-                ,dpfechaEntrada.getValue()
-                ,dpfechaSalida.getValue()));
-           
-        }catch(Exception e){
-            
+        if(dpfechaSalida.getEditor().getText().isEmpty()||dpfechaEntrada.getEditor().getText().isEmpty()){
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Rellene los campos de fecha para buscar");
+                DialogPane dialogPane = alert.getDialogPane();
+                        alert.setHeaderText("Campos vacíos");
+               // dialogPane.getStylesheets().add(getClass().getResource("Custom.css").toExternalForm());
+                alert.showAndWait();
+        }else{
+            if(dpfechaSalida.getValue().compareTo(dpfechaEntrada.getValue())<0){
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Fecha salida no debe ser anterior fecha entrada");
+                DialogPane dialogPane = alert.getDialogPane();
+                        alert.setHeaderText("Fecha salida erronea");
+               // dialogPane.getStylesheets().add(getClass().getResource("Custom.css").toExternalForm());
+                alert.showAndWait();
+            }else{
+                ObservableList pedidosData = null;
+                try{
+                    pedidosData = FXCollections.observableArrayList(        
+                pedidosManager.getPedidosBusquedaAvanzada(comboBoxAreas.getSelectionModel().getSelectedItem().toString()
+                        ,dpfechaEntrada.getValue()
+                        ,dpfechaSalida.getValue(),areaManager));
+
+                }catch(Exception e){
+
+                }
+
+                tablaPedidos.setItems(pedidosData);
+                LOGGER.info("Búsqueda realizada área: "+comboBoxAreas.getSelectionModel().getSelectedItem().toString()+
+                        " fecha inicio: "+dpfechaEntrada.getEditor().getText()+" fecha salida: "+dpfechaSalida.getEditor().getText());
+            }
         }
-        
-        tablaPedidos.setItems(pedidosData);
-        LOGGER.info("Búsqueda realizada área: "+comboBoxAreas.getSelectionModel().getSelectedItem().toString()+
-                " fecha inicio: "+dpfechaEntrada.getEditor().getText()+" fecha salida: "+dpfechaSalida.getEditor().getText());
+
+
     }
 }
-
-
-/*
-
-Combobox de búsqueda avanzada
-Selección
-Habilita el botón buscar de la ventana correspondiente en el caso de no estarlo
-
-Campo de fecha izquierdo
-Selección de fecha
-Habilita el botón buscar de la ventana correspondiente en el caso de no estarlo
-
-Campo de fecha derecho
-Selección de fecha
-Habilita el botón buscar de la ventana correspondiente en el caso de no estarlo
-
-*/
