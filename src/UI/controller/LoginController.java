@@ -74,16 +74,16 @@ public class LoginController{
             gestionPedidos.initStage(root);
             LOGGER.info("usuario admin inicio sesión");
             }else{
-               //Resto de usuarios
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Introduce un usuario y contraseña");
+                DialogPane dialogPane = alert.getDialogPane();
+               // dialogPane.getStylesheets().add(getClass().getResource("Custom.css").toExternalForm());
+                alert.showAndWait();
+                LOGGER.severe("Intento de inicio de sesión erroneo con los siguientes datos :    USUARIO: "
+                        +user.getText()+" CONTRASEÑA: "+password.getText());
             }
         
        }else{
-           Alert alert = new Alert(Alert.AlertType.ERROR, "Introduce un usuario y contraseña");
-           DialogPane dialogPane = alert.getDialogPane();
-          // dialogPane.getStylesheets().add(getClass().getResource("Custom.css").toExternalForm());
-           alert.showAndWait();
-           LOGGER.severe("Intengo de inicio de sesión erroneo con los siguientes datos :    USUARIO: "
-                   +user.getText()+" CONTRASEÑA: "+password.getText());
+
        }
     }
 

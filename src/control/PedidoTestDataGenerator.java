@@ -6,6 +6,8 @@
 package control;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Logger;
@@ -117,34 +119,43 @@ public class PedidoTestDataGenerator implements PedidosManager{
      * @return colección de pedidos que cuadren con los parámetros de búsqueda
      */
     @Override
-    public Collection getPedidosBusquedaAvanzada(String selectedItem, DatePicker dpfechaEntrada, DatePicker dpfechaSalida) {
+    public Collection getPedidosBusquedaAvanzada(String selectedItem, LocalDate dpfechaEntrada, LocalDate dpfechaSalida) {
         
-        Collection busqueda = null;
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            
-           // pedidos.stream().filter(e -> sdf.parse(e.getFechaEntrada()).after(sdf.parse(dpfechaEntrada.getEditor().getText())));
-            
-            boolean bEntrada = true;
-            boolean bSalida = true;
-            boolean guardar;
-            for (PedidoBean pedido : pedidos) {
-                guardar = true;
-                System.out.println("datePedido "+sdf.parse(pedido.getFechaEntrada()));
-               if(bEntrada && sdf.parse(pedido.getFechaEntrada()).before(sdf.parse(dpfechaEntrada.getEditor().getText()))){
-                   guardar=false;
-               }
-               if(bSalida && sdf.parse(pedido.getFechaEntrada()).after(sdf.parse(dpfechaSalida.getEditor().getText()))){
-                    guardar=false;
-                }
-                if(guardar){
-                    busqueda.add(pedido);
-                }
-            }
-            
-        }catch(Exception e){
-            
-        }   
+        Collection busqueda = pedidos;
+        /*
+       // SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+       
+        LOGGER.info(dpfechaEntrada.toString());
+        String x = pedidos.get(1).getFechaEntrada();
+        x=LocalDate.parse(x, formatter).toString();
+        String y= dpfechaEntrada.format(formatter);
+        dpfechaEntrada.format(formatter);
+        dpfechaSalida.format(formatter);
+        LOGGER.info(dpfechaEntrada.toString());
+
+        LOGGER.info(LocalDate.parse(x, formatter).toString());
+        */
+        //this.pedidos=(ArrayList<PedidoBean>) busqueda;
+        
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        //NO SALE EN EL LOGGER!
+        //NO SE PARA EL DEBUG
+        LOGGER.severe("fecha clase :" +LocalDate.parse(pedidos.get(1).getFechaEntrada(), formatter));
+        LOGGER.severe("hola "+dpfechaEntrada);
+        
+        if(dpfechaEntrada!=null){
+             busqueda = pedidos.stream().filter(c -> LocalDate.parse(c.getFechaEntrada(), formatter).compareTo(dpfechaEntrada)>=0)
+                               .collect(Collectors.toList());
+        }
+        if(dpfechaSalida!=null){
+             busqueda = pedidos.stream().filter(c -> LocalDate.parse(c.getFechaSalida(), formatter).compareTo(dpfechaSalida)<=0)
+                               .collect(Collectors.toList());
+        }
+        if(!selectedItem.equals("Todas las áreas")){
+            busqueda = pedidos.stream().filter(c ->c.getArea().equals(selectedItem)).collect(Collectors.toList());
+        }
+        LOGGER.info("Búsqueda finalizada "+busqueda.size()+" resultados");
+
         return busqueda;
     }
 
@@ -165,67 +176,3 @@ public class PedidoTestDataGenerator implements PedidosManager{
     }
 
 }
-          /*  
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            boolean bEntrada = true;
-            boolean bSalida = true;
-            if(dpfechaEntrada.getEditor().getText().isEmpty()){
-                bEntrada = false;
-            }
-            if(dpfechaSalida.getEditor().getText().isEmpty()){
-                bSalida = false;
-            }
-            
-            DateTimeFormatter format= DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            LocalDate entrada = dpfechaEntrada.getValue();
-            entrada.format(format);
-            LocalDate salida = dpfechaSalida.getValue();
-            salida.format(format);
-            
-            System.out.println("salida "+salida);
-            System.out.println("entrada "+entrada);
-            boolean guardar;
-            for (PedidoBean pedido : pedidos) {
-                guardar = true;
-                LocalDate datePedido=LocalDate.parse(pedido.getFechaEntrada(),format);
-                System.out.println("datePedido "+datePedido);
-                if(bEntrada&&(datePedido.compareTo(entrada)<0)){
-                    guardar=false;
-                    
-                    
-                }
-                if(bSalida&&(datePedido.compareTo(salida)>0)){
-                    guardar=false;
-                }
-                if(guardar){
-                    busqueda.add(pedido);
-                }
-            }
-            System.out.println(busqueda.size());
-            return busqueda;
-        } catch (ParseException ex) {
-            Logger.getLogger(PedidoTestDataGenerator.class.getName()).log(Level.SEVERE, null, ex);
-        }
-*/
-    
-    
-

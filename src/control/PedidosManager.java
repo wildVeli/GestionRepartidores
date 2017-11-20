@@ -5,6 +5,7 @@
  */
 package control;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
@@ -20,6 +21,6 @@ public interface PedidosManager {
     public void addPedido(PedidoBean pedidoBean);
     public void updatePedido(PedidoBean pedidoBean);
     public Collection getPedidosBusquedaSimple(String selectedItem, String tfBuscarSimple);
-    public Collection getPedidosBusquedaAvanzada(String selectedItem, DatePicker dpfechaEntrada, DatePicker dpfechaSalida);
+    public Collection getPedidosBusquedaAvanzada(String selectedItem, LocalDate dpfechaEntrada, LocalDate dpfechaSalida);
     public void removePedido(Integer nSeguimiento);
 }

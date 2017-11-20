@@ -414,8 +414,8 @@ public class GestionPedidosController  {
         try{
             pedidosData = FXCollections.observableArrayList(        
         pedidosManager.getPedidosBusquedaAvanzada(comboBoxAreas.getSelectionModel().getSelectedItem().toString()
-                ,dpfechaEntrada
-                ,dpfechaSalida));
+                ,dpfechaEntrada.getValue()
+                ,dpfechaSalida.getValue()));
            
         }catch(Exception e){
             
