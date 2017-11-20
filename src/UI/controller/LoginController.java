@@ -78,7 +78,7 @@ public class LoginController{
                 DialogPane dialogPane = alert.getDialogPane();
                // dialogPane.getStylesheets().add(getClass().getResource("Custom.css").toExternalForm());
                 alert.showAndWait();
-                LOGGER.severe("Intento de inicio de sesión erroneo con los siguientes datos :    USUARIO: "
+                LOGGER.info("Intento de inicio de sesión erroneo con los siguientes datos :    USUARIO: "
                         +user.getText()+" CONTRASEÑA: "+password.getText());
             }
         

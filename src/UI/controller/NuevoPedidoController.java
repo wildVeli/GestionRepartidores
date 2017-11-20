@@ -179,13 +179,13 @@ public class NuevoPedidoController {
             //Guarda un nuevo pedido
             if (tipoVentana.equals("NuevoPedido")) {
                 pedidosManager.addPedido(pedidoBean);
-                LOGGER.severe("admin añade un nuevo pedido");
+                LOGGER.info("admin añade un nuevo pedido");
 
             //Modifica un pedido existente de los datos
             } else if (tipoVentana.equals("Detalles")) {
                 tablaPedidos.getItems().remove(pedidoDetalles);
                 pedidosManager.updatePedido(pedidoBean);     
-                LOGGER.severe("admin modifica un pedido");
+                LOGGER.info("admin modifica un pedido");
             }
             tablaPedidos.getItems().add(pedidoBean);
             //tablaPedidos.refresh();
