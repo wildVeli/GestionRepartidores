@@ -116,8 +116,7 @@ public class PedidoTestDataGenerator implements PedidosManager{
         Collection<PedidoBean> busqueda = null;
 
         int numeroArea=areaManager.getNumeroArea(selectedItem);
-        LOGGER.severe("fecha clase :" +LocalDate.parse(pedidos.get(1).getFechaEntrada(), formatter));
-        LOGGER.severe("hola "+dpfechaEntrada);
+
         
         if(dpfechaEntrada!=null){
             

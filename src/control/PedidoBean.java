@@ -7,11 +7,13 @@ package control;
     
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author Sergio
  */
+@XmlRootElement(name="pedido")
 public class PedidoBean {
    
     private final SimpleIntegerProperty nSeguimiento;

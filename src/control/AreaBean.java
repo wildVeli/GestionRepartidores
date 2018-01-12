@@ -5,10 +5,14 @@
  */
 package control;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  *
  * @author Sergio López Fuentefría
  */
+
+@XmlRootElement(name="area")
 public class AreaBean {
     
     private int cp;
