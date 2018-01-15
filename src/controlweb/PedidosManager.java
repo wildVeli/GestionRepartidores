@@ -45,12 +45,12 @@ public interface PedidosManager  {
      * @param dpfechaSalida contiene la fecha final con la que se filtrará
      * @return colección de pedidos que cuadren con los parámetros de búsqueda
      */
-    public Collection getPedidosBusquedaAvanzada(String selectedItem, LocalDate dpfechaEntrada, LocalDate dpfechaSalida,AreaManager areaManager);
+    public Collection getPedidosBusquedaAvanzada(String selectedItem, String dpfechaEntrada, String dpfechaSalida);
         /**
      * Elimina un pedido
      * @param nSeguimiento número de seguimiento del pedido a eliminar
      */
-    public void removePedido(Integer nSeguimiento);
+    public void removePedido(String nSeguimiento);
     /**
      * Crea los datos para un nuevo pedido
      * @return devuelve un nuevo pedido con los datos basicos generados en base a los pedidos existentes

@@ -8,6 +8,7 @@ package rest;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 
 /**
  * Jersey REST client generated for REST resource:PedidoFacadeREST [pedido]<br>
@@ -56,7 +57,7 @@ public class PedidoRest {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    public <T> T busquedaSimple_XML(Class<T> responseType, String selectedItem, String tfBuscarSimple) throws ClientErrorException {
+    public <T> T busquedaSimple_XML(GenericType<T> responseType, String selectedItem, String tfBuscarSimple) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filtrar/{0}/{1}", new Object[]{selectedItem, tfBuscarSimple}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
@@ -84,7 +85,7 @@ public class PedidoRest {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
     }
 
-    public <T> T busquedaAvanzada_XML(Class<T> responseType, String selectedItem, String fechaEntrada, String fechaSalida) throws ClientErrorException {
+    public <T> T busquedaAvanzada_XML(GenericType<T> responseType, String selectedItem, String fechaEntrada, String fechaSalida) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filtrar/{0}/{1}/{2}", new Object[]{selectedItem, fechaEntrada, fechaSalida}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
@@ -96,7 +97,7 @@ public class PedidoRest {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    public <T> T findAll_XML(Class<T> responseType) throws ClientErrorException {
+    public <T> T findAll_XML(GenericType<T> responseType) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path("findAll");
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);

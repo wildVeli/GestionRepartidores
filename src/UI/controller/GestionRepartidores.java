@@ -5,10 +5,12 @@
  */
 package UI.controller;
 
+
 import control.AreaManager;
 import control.AreaTestDataGenerator;
 import control.PedidoTestDataGenerator;
 import control.PedidosManager;
+
 import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -29,10 +31,16 @@ public class GestionRepartidores extends Application {
         FXMLLoader loader=new FXMLLoader(getClass().getResource("/UI/view/G001UI:Login.fxml"));
         Parent root=(Parent)loader.load();
         
+        //Server mode app
         PedidosManager bussinesslogicController=new PedidoTestDataGenerator();
         AreaManager areaManagerController=new AreaTestDataGenerator();
         areaManagerController.AreaTestDataGenerator();
         
+       /* Client solo app
+        PedidosManager bussinesslogicController=new PedidoTestDataGenerator();
+        AreaManager areaManagerController=new AreaTestDataGenerator();
+        areaManagerController.AreaTestDataGenerator();
+       */ 
         
         LoginController login =loader.getController();
         login.setPedidosManager(bussinesslogicController);

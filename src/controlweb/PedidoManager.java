@@ -5,16 +5,11 @@
  */
 package controlweb;
 
-import control.AreaManager;
 import control.PedidoBean;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
+import java.util.List;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
+import javax.ws.rs.core.GenericType;
 import rest.PedidoRest;
 
 /**
@@ -24,11 +19,16 @@ import rest.PedidoRest;
 public class PedidoManager implements PedidosManager{
     
     private static final Logger LOGGER= Logger.getLogger("controlweb");
-    PedidoRest pedidoREST;
+    private PedidoRest pedidoREST;
+    
+    public PedidoManager (){
+        pedidoREST = new PedidoRest();
+    }
     /**
      * Añade un pedido a los existentes
      * @param pedidoBean pedido que se añadirá a la colección
      */
+    @Override
     public void addPedido(PedidoBean pedidoBean){
         LOGGER.info("Nuevo pedido añadido a los datos");
         pedidoREST.create_XML(pedidoBean);
@@ -38,9 +38,10 @@ public class PedidoManager implements PedidosManager{
      * @return colleción con todos los pedidos
      */
     @Override
-    public Collection getAllPedidos() {
+    public Collection<PedidoBean> getAllPedidos() {
         LOGGER.info("Getting all pedidos");
-        return null;
+        List<PedidoBean> pedidos = pedidoREST.findAll_XML(new GenericType<List<PedidoBean>>() {});
+        return pedidos;
     }
     
 
@@ -50,7 +51,8 @@ public class PedidoManager implements PedidosManager{
      */
     @Override
     public void updatePedido(PedidoBean pedidoBean) {
-
+        LOGGER.info("Updating pedido");
+        pedidoREST.update_XML(pedidoBean);
     }
 
     /**
@@ -61,8 +63,9 @@ public class PedidoManager implements PedidosManager{
      */
     @Override
     public Collection getPedidosBusquedaSimple(String selectedItem, String tfBuscarSimple) {
-
-        return null;
+        LOGGER.info("Búsqueda simple");
+        List<PedidoBean> pedidos = pedidoREST.busquedaSimple_XML(new GenericType<List<PedidoBean>>() {},selectedItem,tfBuscarSimple);
+        return pedidos;
     }
 
     /**
@@ -73,8 +76,10 @@ public class PedidoManager implements PedidosManager{
      * @return colección de pedidos que cuadren con los parámetros de búsqueda
      */
     @Override
-    public Collection getPedidosBusquedaAvanzada(String selectedItem, LocalDate dpfechaEntrada, LocalDate dpfechaSalida,AreaManager areaManager) {
-        return null;
+    public Collection getPedidosBusquedaAvanzada(String selectedItem, String dpfechaEntrada, String dpfechaSalida) {
+        LOGGER.info("Búsqueda avanzada");
+        List<PedidoBean> pedidos = pedidoREST.busquedaAvanzada_XML(new GenericType<List<PedidoBean>>() {},selectedItem,dpfechaEntrada,dpfechaSalida);
+        return pedidos;
     }
 
     /**
@@ -82,7 +87,9 @@ public class PedidoManager implements PedidosManager{
      * @param nSeguimiento número de seguimiento del pedido a eliminar
      */
     @Override
-    public void removePedido(Integer nSeguimiento) {
+    public void removePedido(String nSeguimiento) {
+        LOGGER.info("Removing pedido");
+        pedidoREST.remove(nSeguimiento);
     }
 
     /**
@@ -91,8 +98,12 @@ public class PedidoManager implements PedidosManager{
      */
     @Override
     public PedidoBean getDatosNuevoPedido(){
-        return null;
+        LOGGER.info("Getting new Pedido data");
+        PedidoBean pedido = pedidoREST.getDatosNuevoPedido_XML(PedidoBean.class);
+        return pedido;
     }
+
+   
 
 
 }
