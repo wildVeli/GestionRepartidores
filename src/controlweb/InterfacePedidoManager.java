@@ -14,7 +14,7 @@ import java.util.Collection;
  *
  * @author Sergio López
  */
-public interface PedidosManager  {
+public interface InterfacePedidoManager  {
     
      /**
      * Devuelve todos los pedidos

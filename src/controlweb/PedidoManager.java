@@ -16,7 +16,7 @@ import rest.PedidoRest;
  *
  * @author ubuntu
  */
-public class PedidoManager implements PedidosManager{
+public class PedidoManager implements InterfacePedidoManager{
     
     private static final Logger LOGGER= Logger.getLogger("controlweb");
     private PedidoRest pedidoREST;

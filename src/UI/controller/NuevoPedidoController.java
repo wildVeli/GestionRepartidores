@@ -7,6 +7,7 @@ package UI.controller;
 
 import control.PedidoBean;
 import control.PedidosManager;
+import controlweb.InterfacePedidoManager;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Logger;
@@ -55,7 +56,11 @@ public class NuevoPedidoController {
     private Button atras;
     private TableView<PedidoBean> tablaPedidos;
     private PedidoBean pedidoDetalles;
+    private InterfacePedidoManager pedidoManager;
+    
+    /*without server
     private PedidosManager pedidosManager;
+    */
     private ObservableList pedidosData;
     private String formato = "dd/MM/yyyy";
     private StringConverterDate converter=new StringConverterDate();
@@ -66,8 +71,8 @@ public class NuevoPedidoController {
     }
 
     
-    void setPedidosManager(PedidosManager pedidosManager) {
-        this.pedidosManager = pedidosManager;
+    void setPedidoManager(InterfacePedidoManager pedidoManager) {
+        this.pedidoManager = pedidoManager;
     }
 
     public void setPedidoDetalles(PedidoBean pedidoDetalles) {
@@ -164,13 +169,13 @@ public class NuevoPedidoController {
                     destino.getText(), tipoPago.getText(), Integer.valueOf(repartidor.getText()), Integer.valueOf(area.getText()));
                 //Guarda un nuevo pedido
                 if (tipoVentana.equals("NuevoPedido")) {
-                    pedidosManager.addPedido(pedidoBean);
+                    pedidoManager.addPedido(pedidoBean);
                     LOGGER.info("admin añade un nuevo pedido");
 
                 //Modifica un pedido existente de los datos
                 } else if (tipoVentana.equals("Detalles")) {
                     tablaPedidos.getItems().remove(pedidoDetalles);
-                    pedidosManager.updatePedido(pedidoBean);     
+                    pedidoManager.updatePedido(pedidoBean);     
                     LOGGER.info("admin modifica un pedido");
                 }
                 tablaPedidos.getItems().add(pedidoBean);
@@ -231,7 +236,7 @@ public class NuevoPedidoController {
         Date date = new Date();
         ArrayList<PedidoBean> x = (ArrayList)pedidosManager.getAllPedidos();
          */
-        PedidoBean x = pedidosManager.getDatosNuevoPedido();
+        PedidoBean x = pedidoManager.getDatosNuevoPedido();
         guardar.setDisable(true);
         numeroSeguimiento.setText(String.valueOf(x.getNSeguimiento()));
         albaran.setText(String.valueOf(x.getAlbaran()));

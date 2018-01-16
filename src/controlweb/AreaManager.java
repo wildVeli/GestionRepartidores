@@ -5,23 +5,31 @@
  */
 package controlweb;
 
+import control.AreaBean;
 import java.util.Collection;
+import java.util.List;
+import java.util.logging.Logger;
+import javax.ws.rs.core.GenericType;
+import rest.AreaRest;
 
 /**
  *
- * @author Sergio López
+ * @author ubuntu
  */
-public interface AreaManager {
+public class AreaManager implements InterfaceAreaManager {
+
+    private static final Logger LOGGER= Logger.getLogger("controlweb");
+    private AreaRest areaREST;
     
-     /**
-     * Recoge todos los nombres de las áreas
-     * @return una colección con los nombres de las áreas
-     */
-    public Collection getAllAreaNames();
-    /**
-     * Busca el CP correspondiente al nombre de un área
-     * @param selectedItem nombre del área que se consultará
-     * @return Devuelve el CP correspondiente a un área
-     */
-    public int getNumeroArea(String selectedItem);
+    public AreaManager (){
+        areaREST = new AreaRest();
+    }
+    
+    @Override
+    public Collection getAllAreas() {
+       LOGGER.info("Getting all areas");
+       List <AreaBean> areas = areaREST.findAll_XML(new GenericType <List<AreaBean>>() {});
+       return areas;
+    }
+    
 }

@@ -20,7 +20,9 @@ public class AreaBean {
     private String descripcion;
     private int mapa;
 
-    
+    public AreaBean(){
+        
+    }
     public AreaBean(int cp,String nombre,String descripcion,int mapa){
         this.cp=cp;
         this.nombre=nombre;
@@ -43,8 +45,6 @@ public class AreaBean {
         return mapa;
     }
 
-    
-    
     public void setCp(int cp) {
         this.cp = cp;
     }

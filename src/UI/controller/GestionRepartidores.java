@@ -6,10 +6,10 @@
 package UI.controller;
 
 
-import control.AreaManager;
-import control.AreaTestDataGenerator;
-import control.PedidoTestDataGenerator;
-import control.PedidosManager;
+import controlweb.AreaManager;
+import controlweb.InterfacePedidoManager;
+import controlweb.InterfaceAreaManager;
+import controlweb.PedidoManager;
 
 import java.util.logging.Logger;
 import javafx.application.Application;
@@ -32,9 +32,9 @@ public class GestionRepartidores extends Application {
         Parent root=(Parent)loader.load();
         
         //Server mode app
-        PedidosManager bussinesslogicController=new PedidoTestDataGenerator();
-        AreaManager areaManagerController=new AreaTestDataGenerator();
-        areaManagerController.AreaTestDataGenerator();
+        InterfacePedidoManager bussinesslogicController=new PedidoManager();
+        InterfaceAreaManager areaManagerController=new AreaManager();
+       
         
        /* Client solo app
         PedidosManager bussinesslogicController=new PedidoTestDataGenerator();
@@ -43,7 +43,7 @@ public class GestionRepartidores extends Application {
        */ 
         
         LoginController login =loader.getController();
-        login.setPedidosManager(bussinesslogicController);
+        login.setPedidoManager(bussinesslogicController);
         login.setAreaManager(areaManagerController);
         login.setStage(stage);
         login.initStage(root);

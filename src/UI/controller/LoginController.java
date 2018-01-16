@@ -5,8 +5,8 @@
  */
 package UI.controller;
 
-import control.AreaManager;
-import control.PedidosManager;
+import controlweb.InterfaceAreaManager;
+import controlweb.InterfacePedidoManager;
 import java.io.IOException;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
@@ -34,17 +34,23 @@ public class LoginController{
     private TextField password;
     @FXML
     private Button login;
+    private InterfacePedidoManager pedidoManager;
+    private InterfaceAreaManager areaManager;
+    
+    /*without server
     private PedidosManager pedidosManager;
     private AreaManager areaManager;
+    */
 
     public void setStage(Stage stage){
         this.stage=stage;
     }
-    void setPedidosManager(PedidosManager bussinesslogicController) {
-        this.pedidosManager=bussinesslogicController;
+    
+    void setPedidoManager(InterfacePedidoManager bussinesslogicController) {
+        this.pedidoManager=bussinesslogicController;
     }
 
-    void setAreaManager(AreaManager areaManagerController) {
+    void setAreaManager(InterfaceAreaManager areaManagerController) {
         this.areaManager=areaManagerController;
     }
     @FXML
@@ -69,7 +75,7 @@ public class LoginController{
             Parent root=(Parent)loader.load();
             
             GestionPedidosController gestionPedidos=loader.getController();
-            gestionPedidos.setPedidosManager(pedidosManager);
+            gestionPedidos.setPedidoManager(pedidoManager);
             gestionPedidos.setAreaManager(areaManager);
             gestionPedidos.initStage(root);
             LOGGER.info("usuario admin inicio sesión");

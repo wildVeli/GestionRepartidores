@@ -25,10 +25,15 @@ cada vez que se vuelve a la tabla
 */
 package UI.controller;
 
+import control.AreaBean;
 import control.PedidoBean;
 import control.PedidosManager;
 import control.AreaManager;
+import controlweb.InterfaceAreaManager;
+import controlweb.InterfacePedidoManager;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -104,8 +109,13 @@ public class GestionPedidosController  {
     private DatePicker dpfechaEntrada;
     @FXML
     private DatePicker dpfechaSalida;
+    private InterfaceAreaManager areaManager;
+    private InterfacePedidoManager pedidoManager;
+    
+    /*without server
     private AreaManager areaManager;
     private PedidosManager pedidosManager;
+    */
     //Forma1 private ArrayList pedidosData;
     @FXML
     private Pagination pagination;
@@ -116,13 +126,13 @@ public class GestionPedidosController  {
     private String pattern="dd/MM/yyyy";
     private StringConverterDate converter=new StringConverterDate();
 
-    public void setAreaManager(AreaManager areaManager) {
+    public void setAreaManager(InterfaceAreaManager areaManager) {
         this.areaManager = areaManager;
     }
     
     
-    void setPedidosManager(PedidosManager pedidosManager) {
-        this.pedidosManager=pedidosManager;
+    void setPedidoManager(InterfacePedidoManager pedidoManager) {
+        this.pedidoManager=pedidoManager;
     }
     public void setStage(Stage stage) {
         this.stage = stage;
@@ -178,8 +188,10 @@ public class GestionPedidosController  {
         comboBoxBusquedaPedidos.getSelectionModel().selectFirst();
         
         comboBoxAreas.getItems().add("Todas las áreas");
-        for (Object allAreaName : areaManager.getAllAreaNames()) {
-            comboBoxAreas.getItems().add(allAreaName.toString());
+
+        Collection<AreaBean> areas = areaManager.getAllAreas();
+        for (AreaBean area : areas) {
+            comboBoxAreas.getItems().add(area.getNombre());
         }
         comboBoxAreas.getSelectionModel().selectFirst();
         
@@ -192,7 +204,7 @@ public class GestionPedidosController  {
         pedidosData = null;
         
         try{
-            pedidosData = FXCollections.observableArrayList(pedidosManager.getAllPedidos());
+            pedidosData = FXCollections.observableArrayList(pedidoManager.getAllPedidos());
         }catch(Exception e){
             
         }  
@@ -216,8 +228,13 @@ public class GestionPedidosController  {
      * Crea una paginación acorde a los datos necesitados
      */
     private void pagination(){
-        pagination = new Pagination((pedidosData.size() / lineasPorPagina + 1), 0);
-        pagination.setPageFactory(this::createPage);
+        if(pedidosData.size()!=0){
+            pagination = new Pagination((pedidosData.size() / lineasPorPagina + 1), 0);
+            pagination.setPageFactory(this::createPage);
+        }else{
+            pagination = new Pagination(0,0);
+        }
+
         
         vbox.getChildren().add(new BorderPane(pagination));
         
@@ -231,7 +248,7 @@ public class GestionPedidosController  {
 
         
          try{
-            pedidosData = FXCollections.observableArrayList(pedidosManager.getAllPedidos());
+            pedidosData = FXCollections.observableArrayList(pedidoManager.getAllPedidos());
         }catch(Exception e){
             
         } 
@@ -307,7 +324,7 @@ public class GestionPedidosController  {
         nuevoPedid.setTipoVentana("NuevoPedido");
         nuevoPedid.setTablaPedidos(tablaPedidos);
         //nuevoPedid.setPedidosData(pedidosData);
-        nuevoPedid.setPedidosManager(pedidosManager);
+        nuevoPedid.setPedidoManager(pedidoManager);
         nuevoPedid.initStage(root);    
 
     }
@@ -349,7 +366,7 @@ public class GestionPedidosController  {
         NuevoPedidoController nuevoPedid=loader.getController();
         nuevoPedid.setTipoVentana("Detalles");
         nuevoPedid.setTablaPedidos(tablaPedidos);
-        nuevoPedid.setPedidosManager(pedidosManager);
+        nuevoPedid.setPedidoManager(pedidoManager);
         nuevoPedid.setPedidoDetalles((PedidoBean)tablaPedidos.getSelectionModel().getSelectedItem());
         nuevoPedid.initStage(root); 
         LOGGER.info("comprueba detalles de un pedido");
@@ -373,7 +390,7 @@ public class GestionPedidosController  {
         //dialogPane.getStylesheets().add(getClass().getResource("Custom.css").toExternalForm());
         Optional<ButtonType> result = alert.showAndWait();
         if(result.get()==ButtonType.OK){
-            pedidosManager.removePedido(tablaPedidos.getSelectionModel().getSelectedItem().getNSeguimiento());
+            pedidoManager.removePedido(tablaPedidos.getSelectionModel().getSelectedItem().getNSeguimiento().toString());
         //Forma1  for (Object pedido : pedidosData) {
          //Forma1      PedidoBean x=(PedidoBean)pedido;
         //Forma1      if(x.getNSeguimiento()==tablaPedidos.getSelectionModel().getSelectedItem().getNSeguimiento()){
@@ -400,7 +417,7 @@ public class GestionPedidosController  {
         ObservableList pedidosData = null;
         try{
             pedidosData = FXCollections.observableArrayList
-        (pedidosManager.getPedidosBusquedaSimple(comboBoxBusquedaPedidos.getSelectionModel().getSelectedItem().toString(),tfBuscarSimple.getText()));
+        (pedidoManager.getPedidosBusquedaSimple(comboBoxBusquedaPedidos.getSelectionModel().getSelectedItem().toString(),tfBuscarSimple.getText()));
         }catch(Exception e){
             
         }     
@@ -436,9 +453,9 @@ public class GestionPedidosController  {
                 ObservableList pedidosData = null;
                 try{
                     pedidosData = FXCollections.observableArrayList(        
-                pedidosManager.getPedidosBusquedaAvanzada(comboBoxAreas.getSelectionModel().getSelectedItem().toString()
-                        ,dpfechaEntrada.getValue()
-                        ,dpfechaSalida.getValue(),areaManager));
+                pedidoManager.getPedidosBusquedaAvanzada(comboBoxAreas.getSelectionModel().getSelectedItem().toString()
+                        ,dpfechaEntrada.getValue().toString()
+                        ,dpfechaSalida.getValue().toString()));
 
                 }catch(Exception e){
 

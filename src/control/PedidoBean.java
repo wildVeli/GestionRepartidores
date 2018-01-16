@@ -25,6 +25,7 @@ public class PedidoBean {
     private final SimpleIntegerProperty repartidor;
     private final SimpleIntegerProperty area;
     
+
     public PedidoBean(Integer nSeguimiento,
             Integer albaran,
             String fechaEntrada,
