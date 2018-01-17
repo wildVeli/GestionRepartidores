@@ -6,7 +6,9 @@
 package control;
     
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -16,16 +18,21 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name="pedido")
 public class PedidoBean {
    
-    private final SimpleIntegerProperty nSeguimiento;
-    private final SimpleIntegerProperty albaran;
-    private final SimpleStringProperty fechaEntrada;
-    private final SimpleStringProperty fechaSalida;
-    private final SimpleStringProperty destino;
-    private final SimpleStringProperty tPago;
-    private final SimpleIntegerProperty repartidor;
-    private final SimpleIntegerProperty area;
+    private SimpleIntegerProperty nSeguimiento;
+    private SimpleIntegerProperty albaran;
+    private SimpleStringProperty fechaEntrada;
+    private SimpleStringProperty fechaSalida;
+    private SimpleStringProperty destino;
+    private TipoPago tPago;
+    private SimpleObjectProperty repartidor;
+    private SimpleObjectProperty area;
     
 
+    
+    public PedidoBean(){
+        
+    }
+    
     public PedidoBean(Integer nSeguimiento,
             Integer albaran,
             String fechaEntrada,
@@ -33,27 +40,27 @@ public class PedidoBean {
             String destino,
             String tPago,
             Integer repartidor,
-            Integer area){
+            Object area){
         this.nSeguimiento=new SimpleIntegerProperty(nSeguimiento);
         this.albaran=new SimpleIntegerProperty(albaran);
         this.fechaEntrada=new SimpleStringProperty(fechaEntrada);
         this.fechaSalida=new SimpleStringProperty(fechaSalida);
         this.destino=new SimpleStringProperty(destino);
         this.tPago=new SimpleStringProperty(tPago);
-        this.repartidor=new SimpleIntegerProperty(repartidor);
-        this.area=new SimpleIntegerProperty(area);
+        this.repartidor=new SimpleObjectProperty(repartidor);
+        this.area=new SimpleObjectProperty(area);
     }
 
     public void setRepartidor(Integer repartidor){
         this.repartidor.set(repartidor);
     }
-    public Integer getRepartidor() {
+    public Object getRepartidor() {
         return repartidor.get();
     }
     public void setArea(Integer area){
         this.area.set(area);
     }
-    public Integer getArea() {
+    public Object getArea() {
         return area.get();
     }
     public void setNSeguimiento(Integer nSeguimiento){
@@ -95,6 +102,7 @@ public class PedidoBean {
     public void settPago(String tPago){
         this.tPago.set(tPago);
     }
+    @XmlElement(name="tipoPago")
     public String gettPago() {
         return tPago.get();
     }

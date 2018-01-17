@@ -27,13 +27,10 @@ package UI.controller;
 
 import control.AreaBean;
 import control.PedidoBean;
-import control.PedidosManager;
-import control.AreaManager;
 import controlweb.InterfaceAreaManager;
 import controlweb.InterfacePedidoManager;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -206,7 +203,7 @@ public class GestionPedidosController  {
         try{
             pedidosData = FXCollections.observableArrayList(pedidoManager.getAllPedidos());
         }catch(Exception e){
-            
+            e.printStackTrace();
         }  
         
         
@@ -250,7 +247,7 @@ public class GestionPedidosController  {
          try{
             pedidosData = FXCollections.observableArrayList(pedidoManager.getAllPedidos());
         }catch(Exception e){
-            
+            e.printStackTrace();
         } 
         // pedidosData.sort(Comparator.comparingInt());
         
