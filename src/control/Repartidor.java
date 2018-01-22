@@ -35,8 +35,8 @@ import javax.xml.bind.annotation.XmlTransient;
  *  </ul>
  * @author Sergio López Fuentefría
  */
-
-public class Repartidor implements Serializable {
+@XmlRootElement(name="repartidor")
+public class Repartidor {
 
     private Integer id;
     private String dni;
@@ -50,6 +50,8 @@ public class Repartidor implements Serializable {
     private Collection<PedidoBean> pedidos;
 
    
+    
+     
     public Collection<PedidoBean> getPedidos() {
         return pedidos;
     }
@@ -127,11 +129,11 @@ public class Repartidor implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Area> getAreas() {
+    public Collection<AreaBean> getAreas() {
         return areas;
     }
 
-    public void setAreas(Collection<Area> areas) {
+    public void setAreas(Collection<AreaBean> areas) {
         this.areas = areas;
     }
 

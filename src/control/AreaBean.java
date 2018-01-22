@@ -29,6 +29,10 @@ public class AreaBean {
         this.descripcion=descripcion;
         this.mapa=mapa;
     }
+
+    AreaBean(AreaBean area) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     public int getCp() {
         return cp;
     }

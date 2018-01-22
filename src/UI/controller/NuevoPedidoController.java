@@ -163,7 +163,7 @@ public class NuevoPedidoController {
                 alert.showAndWait();
         }else{
         
-            if (repartidor.getText().matches("[0-9]+") && area.getText().matches("[0-9]+")) {
+          /*  if (repartidor.getText().matches("[0-9]+") && area.getText().matches("[0-9]+")) {
             PedidoBean pedidoBean = new PedidoBean(Integer.valueOf(numeroSeguimiento.getText()),
                     Integer.valueOf(albaran.getText()), fechaEntrada.getText(), fechaSalida.getEditor().getText(),
                     destino.getText(), tipoPago.getText(), Integer.valueOf(repartidor.getText()), Integer.valueOf(area.getText()));
@@ -194,6 +194,7 @@ public class NuevoPedidoController {
                 // dialogPane.getStylesheets().add(getClass().getResource("Custom.css").toExternalForm());
                 alert.showAndWait();
             }
+            */
        }
 
 
@@ -252,7 +253,7 @@ public class NuevoPedidoController {
         fechaEntrada.setText(pedidoDetalles.getFechaEntrada());
         albaran.setText(String.valueOf(pedidoDetalles.getAlbaran()));
         fechaSalida.setValue(LocalDate.parse(pedidoDetalles.getFechaSalida(),formatter));
-        tipoPago.setText(pedidoDetalles.gettPago());
+        tipoPago.setText(pedidoDetalles.gettPago().toString());
         destino.setText(pedidoDetalles.getDestino());
         repartidor.setText(String.valueOf(pedidoDetalles.getRepartidor()));
         area.setText(String.valueOf(pedidoDetalles.getArea()));
