@@ -5,7 +5,10 @@
  */
 package control;
 
+import java.io.Serializable;
+import java.util.Collection;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -13,25 +16,34 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 
 @XmlRootElement(name="area")
-public class AreaBean {
+public class AreaBean implements Serializable {
     
-    private int cp;
+    private Integer cp;
     private String nombre;
     private String descripcion;
-    private int mapa;
+    private Collection<PedidoBean> pedidos;
+    
 
     public AreaBean(){
         
     }
-    public AreaBean(int cp,String nombre,String descripcion,int mapa){
+    public AreaBean(int cp,String nombre,String descripcion){
         this.cp=cp;
         this.nombre=nombre;
         this.descripcion=descripcion;
-        this.mapa=mapa;
+       
+    }
+    @XmlTransient
+    public Collection<PedidoBean> getPedidos() {
+        return pedidos;
     }
 
+    public void setPedidos(Collection<PedidoBean> pedidos) {
+        this.pedidos = pedidos;
+    }
+    
     AreaBean(AreaBean area) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       
     }
     public int getCp() {
         return cp;
@@ -43,10 +55,6 @@ public class AreaBean {
 
     public String getDescripcion() {
         return descripcion;
-    }
-
-    public int getMapa() {
-        return mapa;
     }
 
     public void setCp(int cp) {
@@ -61,9 +69,6 @@ public class AreaBean {
         this.descripcion = descripcion;
     }
 
-    public void setMapa(int mapa) {
-        this.mapa = mapa;
-    }
     
     
     

@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Sergio López Fuentefría
  */
 @XmlRootElement(name="recaudacion")
-public class Recaudacion {
+public class Recaudacion implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id

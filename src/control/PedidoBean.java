@@ -5,34 +5,42 @@
  */
 package control;
     
+import java.io.Serializable;
 import java.util.Date;
-import java.util.Enumeration;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Sergio
  */
 @XmlRootElement(name="pedido")
-public class PedidoBean {
+public class PedidoBean implements Serializable{
    
     private SimpleIntegerProperty nSeguimiento;
     private SimpleIntegerProperty albaran;
-    private SimpleObjectProperty<Date> fechaEntrada;
-    private SimpleObjectProperty<Date> fechaSalida;
+    private Date/*SimpleObjectProperty<Date>*/ fechaEntrada;
+    private Date/*SimpleObjectProperty<Date>*/ fechaSalida;
     private SimpleStringProperty destino;
-    private TipoPago tPago;
-    private Repartidor repartidor;
-    private AreaBean area;
+    private SimpleObjectProperty<TipoPago> tPago;
+    private SimpleObjectProperty<Repartidor> repartidor;
+    private SimpleObjectProperty<AreaBean> area;
     
 
     
-    public PedidoBean(){
-        
+    public PedidoBean() {
+        this.nSeguimiento= new SimpleIntegerProperty();
+        this.albaran= new SimpleIntegerProperty();
+        this.destino= new SimpleStringProperty();
+        this.tPago=new SimpleObjectProperty();
+        /*
+        this.repartidor=new SimpleObjectProperty();
+        this.area= new SimpleObjectProperty();
+        */
     }
     
     public PedidoBean(Integer nSeguimiento,
@@ -45,25 +53,27 @@ public class PedidoBean {
             AreaBean area){
         this.nSeguimiento=new SimpleIntegerProperty(nSeguimiento);
         this.albaran=new SimpleIntegerProperty(albaran);
-        this.fechaEntrada=new SimpleObjectProperty(fechaEntrada);
-        this.fechaSalida=new SimpleObjectProperty(fechaSalida);
+        this.fechaEntrada=fechaEntrada;
+        this.fechaSalida=fechaSalida;
         this.destino=new SimpleStringProperty(destino);
-        this.tPago=tPago;
-        this.repartidor=repartidor;
-        this.area=area;
+        this.tPago=new SimpleObjectProperty(tPago);
+        this.repartidor=new SimpleObjectProperty(repartidor);
+        this.area=new SimpleObjectProperty(area);
     }
 
     public void setRepartidor(Repartidor repartidor){
-        this.repartidor = repartidor;
+        this.repartidor.set(repartidor);
     }
-    public Object getRepartidor() {
-        return repartidor;
+    @XmlTransient
+    public Repartidor getRepartidor() {
+        return repartidor.get();
     }
     public void setArea(AreaBean area){
-        this.area = area;
+        this.area.set(area);
     }
-    public Object getArea() {
-        return area;
+    @XmlTransient
+    public AreaBean getArea() {
+        return area.get();
     }
     public void setNSeguimiento(Integer nSeguimiento){
         this.nSeguimiento.set(nSeguimiento);
@@ -80,18 +90,18 @@ public class PedidoBean {
     }
 
     public void setFechaEntrada(Date fechaEntrada){
-        this.fechaEntrada.set(fechaEntrada);
+        this.fechaEntrada=fechaEntrada;
     }
     public Date getFechaEntrada() {
-        return fechaEntrada.get();
+        return fechaEntrada;
     }
     
 
     public void setFechaSalida(Date fechaSalida){
-        this.fechaSalida.set(fechaSalida);
+        this.fechaSalida=fechaSalida;
     }
     public Date getFechaSalida() {
-        return fechaSalida.get();
+        return fechaSalida;
     }
 
     public void setDestino(String destino){
@@ -102,11 +112,11 @@ public class PedidoBean {
     }
 
     public void settPago(TipoPago tPago){
-        this.tPago = tPago;
+        this.tPago.set(tPago);
     }
     @XmlElement(name="tipoPago")
     public TipoPago gettPago() {
-        return tPago;
+        return tPago.get();
     }
     
 }

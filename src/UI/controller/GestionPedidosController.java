@@ -317,12 +317,13 @@ public class GestionPedidosController  {
             Logger.getLogger(GestionPedidosController.class.getName()).log(Level.SEVERE, null, ex);
         }
             
-        NuevoPedidoController nuevoPedid=loader.getController();
+        /*NuevoPedidoController nuevoPedid=loader.getController();
         nuevoPedid.setTipoVentana("NuevoPedido");
         nuevoPedid.setTablaPedidos(tablaPedidos);
         //nuevoPedid.setPedidosData(pedidosData);
         nuevoPedid.setPedidoManager(pedidoManager);
-        nuevoPedid.initStage(root);    
+        nuevoPedid.initStage(root);  
+        */
 
     }
     /*
@@ -359,13 +360,14 @@ public class GestionPedidosController  {
         } catch (IOException ex) {
             Logger.getLogger(GestionPedidosController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+        /*
         NuevoPedidoController nuevoPedid=loader.getController();
         nuevoPedid.setTipoVentana("Detalles");
         nuevoPedid.setTablaPedidos(tablaPedidos);
         nuevoPedid.setPedidoManager(pedidoManager);
         nuevoPedid.setPedidoDetalles((PedidoBean)tablaPedidos.getSelectionModel().getSelectedItem());
         nuevoPedid.initStage(root); 
+        */
         LOGGER.info("comprueba detalles de un pedido");
         
     }
