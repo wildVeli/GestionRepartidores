@@ -6,6 +6,7 @@
 package control;
     
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -37,10 +38,11 @@ public class PedidoBean implements Serializable{
         this.albaran= new SimpleIntegerProperty();
         this.destino= new SimpleStringProperty();
         this.tPago=new SimpleObjectProperty();
-        /*
+        this.fechaEntrada = new Date();
+        this.fechaSalida = new Date();
         this.repartidor=new SimpleObjectProperty();
         this.area= new SimpleObjectProperty();
-        */
+        
     }
     
     public PedidoBean(Integer nSeguimiento,
@@ -59,25 +61,27 @@ public class PedidoBean implements Serializable{
         this.tPago=new SimpleObjectProperty(tPago);
         this.repartidor=new SimpleObjectProperty(repartidor);
         this.area=new SimpleObjectProperty(area);
+        
     }
 
     public void setRepartidor(Repartidor repartidor){
         this.repartidor.set(repartidor);
     }
-    @XmlTransient
+
     public Repartidor getRepartidor() {
         return repartidor.get();
     }
     public void setArea(AreaBean area){
         this.area.set(area);
     }
-    @XmlTransient
     public AreaBean getArea() {
         return area.get();
     }
+    
     public void setNSeguimiento(Integer nSeguimiento){
         this.nSeguimiento.set(nSeguimiento);
     }
+    
     public Integer getNSeguimiento() {
         return nSeguimiento.get();
     }
@@ -95,7 +99,6 @@ public class PedidoBean implements Serializable{
     public Date getFechaEntrada() {
         return fechaEntrada;
     }
-    
 
     public void setFechaSalida(Date fechaSalida){
         this.fechaSalida=fechaSalida;

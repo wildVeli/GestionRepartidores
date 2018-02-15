@@ -2,13 +2,14 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="384.0" prefWidth="512.0" spacing="20.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.controller.NuevoPedidoController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="384.0" prefWidth="512.0" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.controller.NuevoPedidoController">
    <children>
       <HBox alignment="CENTER" prefHeight="367.0" prefWidth="472.0">
          <children>
@@ -17,25 +18,25 @@
                   <VBox prefHeight="43.0" prefWidth="208.0">
                      <children>
                         <Label text="Número de Seguimiento" />
-                        <TextField disable="true" fx:id="numeroSeguimiento"/>
+                        <TextField fx:id="numeroSeguimiento" disable="true" />
                      </children>
                   </VBox>
                   <VBox prefHeight="49.0" prefWidth="208.0">
                      <children>
                         <Label text="Fecha de Entrada" />
-                        <TextField disable="true" fx:id="fechaEntrada" />
+                        <TextField fx:id="fechaEntrada" disable="true" />
                      </children>
                   </VBox>
                   <VBox prefHeight="43.0" prefWidth="208.0">
                      <children>
                         <Label text="Tipo de pago" />
-                        <TextField fx:id="tipoPago"/>
+                        <ComboBox fx:id="tipoPago" prefWidth="150.0" />
                      </children>
                   </VBox>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
                         <Label text="Repartidor" />
-                        <TextField fx:id="repartidor" />
+                        <ComboBox fx:id="repartidor" prefWidth="150.0" />
                      </children>
                   </VBox>
                </children>
@@ -48,25 +49,25 @@
                   <VBox prefHeight="42.0" prefWidth="213.0">
                      <children>
                         <Label text="Albarán" />
-                        <TextField disable="true" fx:id="albaran" />
+                        <TextField fx:id="albaran" disable="true" />
                      </children>
                   </VBox>
                   <VBox prefHeight="22.0" prefWidth="213.0">
                      <children>
                         <Label text="Fecha de Salida" />
-                        <DatePicker prefHeight="25.0" prefWidth="224.0" fx:id="fechaSalida"/>
+                        <DatePicker fx:id="fechaSalida" prefHeight="25.0" prefWidth="224.0" />
                      </children>
                   </VBox>
                   <VBox prefHeight="41.0" prefWidth="153.0">
                      <children>
                         <Label text="Destino" />
-                        <TextField fx:id="destino"/>
+                        <TextField fx:id="destino" />
                      </children>
                   </VBox>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
                         <Label text="Área" />
-                        <TextField fx:id="area" />
+                        <ComboBox fx:id="area" prefWidth="150.0" />
                      </children>
                   </VBox>
                </children>
@@ -81,8 +82,8 @@
       </HBox>
       <HBox alignment="CENTER" prefHeight="49.0" prefWidth="472.0" spacing="30.0">
          <children>
-            <Button mnemonicParsing="false" text="Guardar" fx:id="guardar" onAction="#handleBotonGuardarAction"/>
-            <Button mnemonicParsing="false" text="Atrás" fx:id="atras" onAction="#handleBotonAtrasAction"/>
+            <Button fx:id="guardar" mnemonicParsing="false" onAction="#handleBotonGuardarAction" text="Guardar" />
+            <Button fx:id="atras" mnemonicParsing="false" onAction="#handleBotonAtrasAction" text="Atrás" />
          </children>
       </HBox>
    </children>

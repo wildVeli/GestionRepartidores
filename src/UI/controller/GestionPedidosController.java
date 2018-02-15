@@ -30,6 +30,8 @@ import control.PedidoBean;
 import controlweb.InterfaceAreaManager;
 import controlweb.InterfacePedidoManager;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -244,6 +246,7 @@ public class GestionPedidosController  {
     private Node createPage(int pageIndex) {
 
         
+        
          try{
             pedidosData = FXCollections.observableArrayList(pedidoManager.getAllPedidos());
         }catch(Exception e){
@@ -317,13 +320,14 @@ public class GestionPedidosController  {
             Logger.getLogger(GestionPedidosController.class.getName()).log(Level.SEVERE, null, ex);
         }
             
-        /*NuevoPedidoController nuevoPedid=loader.getController();
+        NuevoPedidoController nuevoPedid=loader.getController();
         nuevoPedid.setTipoVentana("NuevoPedido");
         nuevoPedid.setTablaPedidos(tablaPedidos);
+        nuevoPedid.setAreaManager(areaManager);
         //nuevoPedid.setPedidosData(pedidosData);
         nuevoPedid.setPedidoManager(pedidoManager);
         nuevoPedid.initStage(root);  
-        */
+        
 
     }
     /*
@@ -360,14 +364,15 @@ public class GestionPedidosController  {
         } catch (IOException ex) {
             Logger.getLogger(GestionPedidosController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        /*
+        
         NuevoPedidoController nuevoPedid=loader.getController();
         nuevoPedid.setTipoVentana("Detalles");
         nuevoPedid.setTablaPedidos(tablaPedidos);
+        nuevoPedid.setAreaManager(areaManager);
         nuevoPedid.setPedidoManager(pedidoManager);
         nuevoPedid.setPedidoDetalles((PedidoBean)tablaPedidos.getSelectionModel().getSelectedItem());
         nuevoPedid.initStage(root); 
-        */
+        
         LOGGER.info("comprueba detalles de un pedido");
         
     }
@@ -414,11 +419,21 @@ public class GestionPedidosController  {
     private void handleBotonBuscarSimple (){
         
         ObservableList pedidosData = null;
+        //Tipo de busqueda
+        String tipoBusqueda = comboBoxBusquedaPedidos.getSelectionModel().getSelectedItem().toString().toLowerCase();
+        LOGGER.info(tipoBusqueda);
+        if(tipoBusqueda.equals("n.seguimiento"))
+            tipoBusqueda = "nseguimiento";
+        else if (tipoBusqueda.equals("fecha entrada"))
+            tipoBusqueda = "fechaentrada";
+        else if (tipoBusqueda.equals("albarán"))
+            tipoBusqueda = "albaran";
+        LOGGER.info(tipoBusqueda);
         try{
             pedidosData = FXCollections.observableArrayList
-        (pedidoManager.getPedidosBusquedaSimple(comboBoxBusquedaPedidos.getSelectionModel().getSelectedItem().toString(),tfBuscarSimple.getText()));
+        (pedidoManager.getPedidosBusquedaSimple(tipoBusqueda,tfBuscarSimple.getText().toLowerCase()));
         }catch(Exception e){
-            
+            e.printStackTrace();
         }     
         tablaPedidos.setItems(pedidosData);
         LOGGER.info("Búsqueda realizada por criterio :"+comboBoxBusquedaPedidos.getSelectionModel().getSelectedItem().toString()+" buscado: "+tfBuscarSimple.getText());
@@ -451,10 +466,25 @@ public class GestionPedidosController  {
             }else{
                 ObservableList pedidosData = null;
                 try{
+                    //Cambio string áreas seleccionadas
+                    String areaSeleccionada = comboBoxAreas.getSelectionModel().getSelectedItem().toString();
+                    if(areaSeleccionada.equals("Todas las áreas"))
+                        areaSeleccionada = "todaslasareas";
+                    
+                      //String fsalida = new SimpleDateFormat("yyyy-MM-dd").format(dpfechaEntrada.getValue().toString());
+        
+                     // fechaSalida.setValue(LocalDate.parse(fsalida));
+                    
+                    //Reemplazar "/" por "-" para consultas http
+                     String sfechaEntrada = dpfechaEntrada.getValue().toString().replace("/","-");
+                     String sfechaSalida = dpfechaSalida.getValue().toString().replace("/","-");
+                     LOGGER.info(sfechaEntrada);
+                     
+                    
                     pedidosData = FXCollections.observableArrayList(        
-                pedidoManager.getPedidosBusquedaAvanzada(comboBoxAreas.getSelectionModel().getSelectedItem().toString()
-                        ,dpfechaEntrada.getValue().toString()
-                        ,dpfechaSalida.getValue().toString()));
+                pedidoManager.getPedidosBusquedaAvanzada(areaSeleccionada
+                        ,sfechaEntrada
+                        ,sfechaSalida));
 
                 }catch(Exception e){
 
