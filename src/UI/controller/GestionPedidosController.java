@@ -33,7 +33,12 @@ import controlweb.InterfaceRepartidorManager;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -67,6 +72,9 @@ import javafx.scene.web.WebEngine;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.*;
+import net.sf.jasperreports.view.*;
 
 
 /**
@@ -421,8 +429,31 @@ public class GestionPedidosController  {
      * Crea un informe de la tabla de pedidos (utiliza JasperReports)
      */
     private void handleBotonCrearInforme(){
+        try {
+            JasperReport report = JasperCompileManager.compileReport("src/UI/reports/pedidosReport.jrxml");
+        List<Map<String,Object>> dataSource = new ArrayList<Map<String,Object>>();
+        for(PedidoBean pedido: this.tablaPedidos.getItems()){
+            Map<String,Object> row = new HashMap<String,Object>();
+            row.put("nseguimiento", pedido.getNSeguimiento());
+            row.put("albaran", pedido.getAlbaran());
+            row.put("fechaEntrada", new SimpleDateFormat("dd/MM/yyyy").format(pedido.getFechaEntrada()));
+            row.put("destino", pedido.getDestino());
+            row.put("repartidor", pedido.getRepartidor().getNombre());
+           dataSource.add(row);
+        }
+        JRDataSource jRDataSource = new JRBeanCollectionDataSource(dataSource);
         
-        
+        JasperPrint jasperPrint = JasperFillManager.fillReport(report,null,jRDataSource);
+        //Evita que se cierre todo el programa con el booleano false en el constructor
+        JasperViewer jasperViewer = new JasperViewer(jasperPrint,false);
+        //Otra opción para hacer lo mismo
+        //jasperViewer.viewReport(jasperPrint,flase);
+        jasperViewer.setVisible(true);
+//        
+        } catch (JRException ex) {
+            ex.printStackTrace();
+           // Logger.getLogger(GestionPedidosController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     /*
         Botón Eliminar
