@@ -12,6 +12,7 @@ import control.Repartidor;
 import control.TipoPago;
 import controlweb.InterfaceAreaManager;
 import controlweb.InterfacePedidoManager;
+import controlweb.InterfaceRepartidorManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -68,7 +69,9 @@ public class NuevoPedidoController {
     private PedidoBean pedidoDetalles;
     private InterfaceAreaManager areaManager;
     private InterfacePedidoManager pedidoManager;
+    private InterfaceRepartidorManager repartidorManager;
     private Collection<AreaBean> areas;
+    private Collection<Repartidor> repartidores;
     
     
     /*without server
@@ -78,8 +81,17 @@ public class NuevoPedidoController {
     private String formato = "dd/MM/yyyy";
     private StringConverterDate converter=new StringConverterDate();
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(formato);
+
+    public InterfaceRepartidorManager getRepartidorManager() {
+        return repartidorManager;
+    }
+
+    public void setRepartidorManager(InterfaceRepartidorManager repartidorManager) {
+        this.repartidorManager = repartidorManager;
+    }
    
 
+    
     public InterfaceAreaManager getAreaManager() {
         return areaManager;
     }
@@ -146,6 +158,7 @@ public class NuevoPedidoController {
     private void handleWindowShowing(WindowEvent event){
                 
         areas = areaManager.getAllAreas();
+        repartidores = repartidorManager.getAllRepartidores();
         fechaEntrada.setDisable(true);
         numeroSeguimiento.setDisable(true);
         albaran.setDisable(true);
@@ -198,7 +211,15 @@ public class NuevoPedidoController {
             if(tipoPago.getSelectionModel().getSelectedIndex()==0)
                 tipoElegido=TipoPago.TARJETA;
             
-            //TODO Repartidor
+            // Repartidor
+            Repartidor RepartidorSeleccionado = null;
+            for (Repartidor repar : repartidores) {
+                if(repar.getNombre().equals(repartidor.getSelectionModel().getSelectedItem().toString())){
+                    RepartidorSeleccionado = repar;
+                    break;
+                }
+                    
+            }
             //Area
             AreaBean areaSeleccionada = null;
             for (AreaBean are : areas) {
@@ -213,7 +234,7 @@ public class NuevoPedidoController {
                     fsalida,
                     destino.getText(),
                     tipoElegido,
-                    (Repartidor)repartidor.getSelectionModel().getSelectedItem(),
+                    RepartidorSeleccionado,
                     areaSeleccionada);
                 //Guarda un nuevo pedido
                 if (tipoVentana.equals("NuevoPedido")) {
@@ -283,9 +304,13 @@ public class NuevoPedidoController {
         tipoPago.getItems().add("METÁLICO");
 
         tipoPago.getSelectionModel().select(0);
-        //TODO añadir repartidores
-       // repartidor.setText(String.valueOf(pedidoDetalles.getRepartidor()));
         
+     
+        for (Repartidor repart : repartidores) {
+            repartidor.getItems().add(repart.getNombre());
+        } 
+        repartidor.getSelectionModel().select(0);
+       
         for (AreaBean are : areas) {
             area.getItems().add(are.getNombre());
         }
@@ -316,9 +341,14 @@ public class NuevoPedidoController {
        
         destino.setText(pedidoDetalles.getDestino());
         //TODO añadir repartidores
+        for (Repartidor repart : repartidores) {
+            repartidor.getItems().add(repart.getNombre());
+        } 
+        repartidor.setValue(pedidoDetalles.getRepartidor().getNombre());
        // repartidor.setText(String.valueOf(pedidoDetalles.getRepartidor()));
-        
-
+       
+       
+       
         for (AreaBean are : areas) {
             area.getItems().add(are.getNombre());
         }

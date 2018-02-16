@@ -9,7 +9,9 @@ package UI.controller;
 import controlweb.AreaManager;
 import controlweb.InterfacePedidoManager;
 import controlweb.InterfaceAreaManager;
+import controlweb.InterfaceRepartidorManager;
 import controlweb.PedidoManager;
+import controlweb.RepartidorManager;
 
 import java.util.logging.Logger;
 import javafx.application.Application;
@@ -32,8 +34,9 @@ public class GestionRepartidores extends Application {
         Parent root=(Parent)loader.load();
         
         //Server mode app
-        InterfacePedidoManager bussinesslogicController=new PedidoManager();
-        InterfaceAreaManager areaManagerController=new AreaManager();
+        InterfacePedidoManager bussinesslogicController = new PedidoManager();
+        InterfaceAreaManager areaManagerController = new AreaManager();
+        InterfaceRepartidorManager repartidorManager = new RepartidorManager();
        
         
        /* Client solo app
@@ -45,6 +48,7 @@ public class GestionRepartidores extends Application {
         LoginController login =loader.getController();
         login.setPedidoManager(bussinesslogicController);
         login.setAreaManager(areaManagerController);
+        login.setRepartidorManager(repartidorManager);
         login.setStage(stage);
         login.initStage(root);
         

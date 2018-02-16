@@ -7,6 +7,7 @@ package UI.controller;
 
 import controlweb.InterfaceAreaManager;
 import controlweb.InterfacePedidoManager;
+import controlweb.InterfaceRepartidorManager;
 import java.io.IOException;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
@@ -36,11 +37,21 @@ public class LoginController{
     private Button login;
     private InterfacePedidoManager pedidoManager;
     private InterfaceAreaManager areaManager;
+    private InterfaceRepartidorManager repartidorManager;
     
     /*without server
     private PedidosManager pedidosManager;
     private AreaManager areaManager;
     */
+
+    public InterfaceRepartidorManager getRepartidorManager() {
+        return repartidorManager;
+    }
+
+    public void setRepartidorManager(InterfaceRepartidorManager repartidorManager) {
+        this.repartidorManager = repartidorManager;
+    }
+    
 
     public void setStage(Stage stage){
         this.stage=stage;
@@ -77,6 +88,7 @@ public class LoginController{
             GestionPedidosController gestionPedidos=loader.getController();
             gestionPedidos.setPedidoManager(pedidoManager);
             gestionPedidos.setAreaManager(areaManager);
+            gestionPedidos.setRepartidorManager(repartidorManager);
             gestionPedidos.initStage(root);
             LOGGER.info("usuario admin inicio sesión");
             }else{

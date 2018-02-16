@@ -29,6 +29,7 @@ import control.AreaBean;
 import control.PedidoBean;
 import controlweb.InterfaceAreaManager;
 import controlweb.InterfacePedidoManager;
+import controlweb.InterfaceRepartidorManager;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -60,8 +61,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.web.PopupFeatures;
+import javafx.scene.web.WebView;
+import javafx.scene.web.WebEngine;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.util.Callback;
 
 
 /**
@@ -91,6 +96,8 @@ public class GestionPedidosController  {
     @FXML
     private Button eliminar;
     @FXML
+    private Button mapa;
+    @FXML
     private Button salir;
     @FXML
     private Button nuevoPedido;
@@ -110,6 +117,7 @@ public class GestionPedidosController  {
     private DatePicker dpfechaSalida;
     private InterfaceAreaManager areaManager;
     private InterfacePedidoManager pedidoManager;
+    private InterfaceRepartidorManager repartidorManager;
     
     /*without server
     private AreaManager areaManager;
@@ -125,6 +133,16 @@ public class GestionPedidosController  {
     private String pattern="dd/MM/yyyy";
     private StringConverterDate converter=new StringConverterDate();
 
+    public InterfaceRepartidorManager getRepartidorManager() {
+        return repartidorManager;
+    }
+
+    public void setRepartidorManager(InterfaceRepartidorManager repartidorManager) {
+        this.repartidorManager = repartidorManager;
+    }
+
+    
+    
     public void setAreaManager(InterfaceAreaManager areaManager) {
         this.areaManager = areaManager;
     }
@@ -324,6 +342,7 @@ public class GestionPedidosController  {
         nuevoPedid.setTipoVentana("NuevoPedido");
         nuevoPedid.setTablaPedidos(tablaPedidos);
         nuevoPedid.setAreaManager(areaManager);
+        nuevoPedid.setRepartidorManager(repartidorManager);
         //nuevoPedid.setPedidosData(pedidosData);
         nuevoPedid.setPedidoManager(pedidoManager);
         nuevoPedid.initStage(root);  
@@ -370,10 +389,39 @@ public class GestionPedidosController  {
         nuevoPedid.setTablaPedidos(tablaPedidos);
         nuevoPedid.setAreaManager(areaManager);
         nuevoPedid.setPedidoManager(pedidoManager);
+        nuevoPedid.setRepartidorManager(repartidorManager);
         nuevoPedid.setPedidoDetalles((PedidoBean)tablaPedidos.getSelectionModel().getSelectedItem());
         nuevoPedid.initStage(root); 
         
         LOGGER.info("comprueba detalles de un pedido");
+        
+    }
+    @FXML
+    /**
+     * Carga un navegador con google maps en una nueva ventana (utiliza WebView)
+     */
+    private void handleBotonMapa(){
+        WebView browser = new WebView();
+        WebEngine webEngine = browser.getEngine();
+        webEngine.load("https://www.google.es/maps/@43.3201152,-3.0324976,14z");
+        webEngine.setCreatePopupHandler(new Callback<PopupFeatures, WebEngine>(){
+            @Override 
+            public WebEngine call(PopupFeatures config){
+                return null;
+        
+            }
+        });
+        Scene web = new Scene(browser);
+        stage = new Stage();
+        stage.setScene(web);
+        stage.show();
+    }
+    @FXML
+    /**
+     * Crea un informe de la tabla de pedidos (utiliza JasperReports)
+     */
+    private void handleBotonCrearInforme(){
+        
         
     }
     /*
@@ -405,6 +453,7 @@ public class GestionPedidosController  {
              LOGGER.info("El admin manda eliminar un pedido");
             
         }
+
         
     }
     @FXML
@@ -419,24 +468,38 @@ public class GestionPedidosController  {
     private void handleBotonBuscarSimple (){
         
         ObservableList pedidosData = null;
+        Boolean buscar = true;
         //Tipo de busqueda
         String tipoBusqueda = comboBoxBusquedaPedidos.getSelectionModel().getSelectedItem().toString().toLowerCase();
         LOGGER.info(tipoBusqueda);
-        if(tipoBusqueda.equals("n.seguimiento"))
+        if(tipoBusqueda.equals("n.seguimiento")){
             tipoBusqueda = "nseguimiento";
-        else if (tipoBusqueda.equals("fecha entrada"))
+        }else if (tipoBusqueda.equals("fecha entrada")){
             tipoBusqueda = "fechaentrada";
-        else if (tipoBusqueda.equals("albarán"))
+            if(!tfBuscarSimple.getText().toString().matches("\\d{2}-\\d{2}-\\d{4}")){
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Formato: 01-02-2018(dd-mm-yyyy)");
+                DialogPane dialogPane = alert.getDialogPane();
+                        alert.setHeaderText("Formato fecha erroneo");
+               // dialogPane.getStylesheets().add(getClass().getResource("Custom.css").toExternalForm());
+                alert.showAndWait();
+                buscar = false;
+            }
+        }else if (tipoBusqueda.equals("albarán")){
             tipoBusqueda = "albaran";
+        }
         LOGGER.info(tipoBusqueda);
         try{
-            pedidosData = FXCollections.observableArrayList
-        (pedidoManager.getPedidosBusquedaSimple(tipoBusqueda,tfBuscarSimple.getText().toLowerCase()));
+            if(buscar){
+                      pedidosData = FXCollections.observableArrayList
+            (pedidoManager.getPedidosBusquedaSimple(tipoBusqueda,tfBuscarSimple.getText().toLowerCase()));
+                       tablaPedidos.setItems(pedidosData);
+                  LOGGER.info("Búsqueda realizada por criterio :"+comboBoxBusquedaPedidos.getSelectionModel().getSelectedItem().toString()+" buscado: "+tfBuscarSimple.getText());
+            }
+      
         }catch(Exception e){
             e.printStackTrace();
         }     
-        tablaPedidos.setItems(pedidosData);
-        LOGGER.info("Búsqueda realizada por criterio :"+comboBoxBusquedaPedidos.getSelectionModel().getSelectedItem().toString()+" buscado: "+tfBuscarSimple.getText());
+       
     }
     
     @FXML
