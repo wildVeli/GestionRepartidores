@@ -66,7 +66,7 @@
                               </HBox>
                               <HBox alignment="CENTER_RIGHT" prefHeight="62.0" prefWidth="510.0" spacing="40.0">
                                  <children>
-                                    <Button fx:id="informe" mnemonicParsing="false" text="Crear informe" onAction="#handleBotonCrearInforme"/>
+                                    <Button fx:id="informe" mnemonicParsing="false" onAction="#handleBotonCrearInforme" text="Crear informe" />
                                     <Button fx:id="nuevoPedido" mnemonicParsing="false" onAction="#handleBotonNuevoPedidoAction" text="Nuevo Pedido..." />
                                  </children>
                                  <HBox.margin>
@@ -123,11 +123,11 @@
        <VBox fx:id="vbox">
       <TableView fx:id="tablaPedidos" minHeight="-Infinity" minWidth="-Infinity" prefHeight="493.0" prefWidth="994.0" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn fx:id="tbcolnSeguimiento" prefWidth="130.0" text="Número de seguimiento" />
-          <TableColumn fx:id="tbcolAlbaran" prefWidth="130.0" text="Albarán" />
-            <TableColumn fx:id="tbcolnFechaEntrada" prefWidth="187.0" text="Fecha de Entrada" />
-            <TableColumn fx:id="tbcolDireccion" prefWidth="180.0" text="Direccion de Destino" />
-            <TableColumn fx:id="tbcolnRepartidor" prefWidth="172.0" text="Repartidor" />
+          <TableColumn fx:id="tbcolnSeguimiento" prefWidth="187.0" text="Número de seguimiento" />
+          <TableColumn fx:id="tbcolAlbaran" prefWidth="74.0" text="Albarán" />
+            <TableColumn fx:id="tbcolnFechaEntrada" prefWidth="227.0" text="Fecha de Entrada" />
+            <TableColumn fx:id="tbcolDireccion" prefWidth="177.0" text="Dirección de Destino" />
+            <TableColumn fx:id="tbcolnRepartidor" prefWidth="195.0" text="Repartidor" />
         </columns>
       </TableView>
       </VBox>

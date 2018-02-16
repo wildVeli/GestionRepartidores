@@ -8,6 +8,8 @@ package control;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
@@ -60,7 +62,9 @@ public class Repartidor implements Serializable{
         this.pedidos = pedidos;
     }
     
-
+    public StringProperty nombreProperty(){
+        return new SimpleStringProperty(nombre);
+    }
     
     
     public Integer getId() {

@@ -11,6 +11,7 @@ import java.util.Date;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -93,11 +94,17 @@ public class PedidoBean implements Serializable{
         return albaran.get();
     }
 
+    
     public void setFechaEntrada(Date fechaEntrada){
         this.fechaEntrada=fechaEntrada;
     }
+    
     public Date getFechaEntrada() {
         return fechaEntrada;
+    }
+    
+    public StringProperty getFechaEntradaformateada() {
+        return new SimpleStringProperty(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
     }
 
     public void setFechaSalida(Date fechaSalida){

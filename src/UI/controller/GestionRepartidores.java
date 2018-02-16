@@ -30,12 +30,13 @@ public class GestionRepartidores extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         
-        FXMLLoader loader=new FXMLLoader(getClass().getResource("/UI/view/G001UI:Login.fxml"));
+        FXMLLoader loader=new FXMLLoader(getClass().getResource("/UI/view/G006UI:GestionPedidos.fxml"));
         Parent root=(Parent)loader.load();
+            
         
         //Server mode app
-        InterfacePedidoManager bussinesslogicController = new PedidoManager();
-        InterfaceAreaManager areaManagerController = new AreaManager();
+        InterfacePedidoManager pedidoManager = new PedidoManager();
+        InterfaceAreaManager areaManager= new AreaManager();
         InterfaceRepartidorManager repartidorManager = new RepartidorManager();
        
         
@@ -45,12 +46,12 @@ public class GestionRepartidores extends Application {
         areaManagerController.AreaTestDataGenerator();
        */ 
         
-        LoginController login =loader.getController();
-        login.setPedidoManager(bussinesslogicController);
-        login.setAreaManager(areaManagerController);
-        login.setRepartidorManager(repartidorManager);
-        login.setStage(stage);
-        login.initStage(root);
+
+        GestionPedidosController gestionPedidos=loader.getController();
+        gestionPedidos.setPedidoManager(pedidoManager);
+        gestionPedidos.setAreaManager(areaManager);
+        gestionPedidos.setRepartidorManager(repartidorManager);
+        gestionPedidos.initStage(root);
         
         LOGGER.info("Aplicación iniciada con éxito");
     }

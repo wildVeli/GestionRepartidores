@@ -33,6 +33,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -72,6 +73,7 @@ public class NuevoPedidoController {
     private InterfaceRepartidorManager repartidorManager;
     private Collection<AreaBean> areas;
     private Collection<Repartidor> repartidores;
+    private Stage parentStage;
     
     
     /*without server
@@ -88,6 +90,14 @@ public class NuevoPedidoController {
 
     public void setRepartidorManager(InterfaceRepartidorManager repartidorManager) {
         this.repartidorManager = repartidorManager;
+    }
+
+    public Stage getParentStage() {
+        return parentStage;
+    }
+
+    public void setParentStage(Stage parentStage) {
+        this.parentStage = parentStage;
     }
    
 
@@ -145,8 +155,10 @@ public class NuevoPedidoController {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setOnShowing(this::handleWindowShowing);
-        stage.show();
-        
+        //Controla que la ventana sea modal
+        stage.initOwner(parentStage);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
 
        
 

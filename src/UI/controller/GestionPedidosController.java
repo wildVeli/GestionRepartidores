@@ -61,6 +61,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -174,6 +175,7 @@ public class GestionPedidosController  {
         stage.setOnShowing(this::handleWindowShowing);
         stage.setTitle("Gestión de pedidos");
         stage.show();
+        
     }
     /*
         La ComboBox de búsqueda de pedidos se carga con los valores:
@@ -222,9 +224,25 @@ public class GestionPedidosController  {
         
         tbcolnSeguimiento.setCellValueFactory(new PropertyValueFactory<>("nSeguimiento"));
         tbcolAlbaran.setCellValueFactory(new PropertyValueFactory<>("albaran"));
-        tbcolnFechaEntrada.setCellValueFactory(new PropertyValueFactory<>("fechaEntrada"));
+        tbcolnFechaEntrada.setCellValueFactory(new Callback<CellDataFeatures<PedidoBean, String>, 
+                                                         ObservableValue<String>>() {  
+        //Una forma que la celda muestre el dato formateado                                                     
+        @Override  
+        public ObservableValue<String> call(CellDataFeatures<PedidoBean, String> data){  
+             return data.getValue().getFechaEntradaformateada();  
+        }  
+        });  
+                
         tbcolDireccion.setCellValueFactory(new PropertyValueFactory<>("destino"));
-        tbcolnRepartidor.setCellValueFactory(new PropertyValueFactory<>("repartidor"));
+        
+        //Una forma que la celda muestre el dato que está dentro de un attributo objeto en la lista que le pasamos
+        tbcolnRepartidor.setCellValueFactory(new Callback<CellDataFeatures<PedidoBean, String>, 
+                                                         ObservableValue<String>>() {  
+        @Override  
+        public ObservableValue<String> call(CellDataFeatures<PedidoBean, String> data){  
+             return data.getValue().getRepartidor().nombreProperty();  
+        }  
+        });  
        
         pedidosData = null;
         
@@ -351,6 +369,7 @@ public class GestionPedidosController  {
         nuevoPedid.setTablaPedidos(tablaPedidos);
         nuevoPedid.setAreaManager(areaManager);
         nuevoPedid.setRepartidorManager(repartidorManager);
+        nuevoPedid.setParentStage(this.stage);
         //nuevoPedid.setPedidosData(pedidosData);
         nuevoPedid.setPedidoManager(pedidoManager);
         nuevoPedid.initStage(root);  
@@ -397,6 +416,7 @@ public class GestionPedidosController  {
         nuevoPedid.setTablaPedidos(tablaPedidos);
         nuevoPedid.setAreaManager(areaManager);
         nuevoPedid.setPedidoManager(pedidoManager);
+        nuevoPedid.setParentStage(this.stage);
         nuevoPedid.setRepartidorManager(repartidorManager);
         nuevoPedid.setPedidoDetalles((PedidoBean)tablaPedidos.getSelectionModel().getSelectedItem());
         nuevoPedid.initStage(root); 
